@@ -61,6 +61,12 @@
 
         <!-- GENERAL UTILS begin -->
         <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.2</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>de.ruedigermoeller</groupId>
             <artifactId>fst</artifactId>
             <version>1.63</version>
