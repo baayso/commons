@@ -1,4 +1,4 @@
-package com.baayso.commons.utils;
+package com.baayso.commons.spring;
 
 import java.util.Map;
 
