@@ -27,14 +27,19 @@ public final class WebUtils {
     /**
      * 获取客户端IP地址。
      *
-     * @param request http servlet request
+     * @param request {@linkplain javax.servlet.http.HttpServletRequest}
      *
      * @return 客户端IP
      *
      * @since 1.0.0
      */
     public static String getRealIp(HttpServletRequest request) {
-        String ip = request.getHeader("x-forwarded-for");
+
+        String ip = request.getHeader("X-Real-IP");
+
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("X-Forwarded-For");
+        }
 
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
@@ -48,13 +53,25 @@ public final class WebUtils {
             ip = request.getRemoteAddr();
         }
 
-        return ip;
+        return "0:0:0:0:0:0:0:1".equalsIgnoreCase(ip) ? "127.0.0.1" : ip;
     }
 
     /**
      * 将json字符串返回给客户端。
      *
-     * @param response       {@linkplain HttpServletResponse}
+     * @param response {@linkplain javax.servlet.http.HttpServletResponse}
+     * @param json     JSON字符串
+     *
+     * @since 1.0.0
+     */
+    public static void writeJson(HttpServletResponse response, String json) {
+        writeJson(response, json, 200);
+    }
+
+    /**
+     * 将json字符串返回给客户端。
+     *
+     * @param response       {@linkplain javax.servlet.http.HttpServletResponse}
      * @param json           JSON字符串
      * @param httpStatusCode HTTP状态码
      *
