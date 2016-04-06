@@ -74,7 +74,7 @@ public final class HttpClientUtils {
 
         String data = "";
 
-        try (CloseableHttpResponse response = httpClient.execute(post);) {
+        try (CloseableHttpResponse response = httpClient.execute(post)) {
 
             HttpEntity entity = response.getEntity();
             InputStream in = entity.getContent();
