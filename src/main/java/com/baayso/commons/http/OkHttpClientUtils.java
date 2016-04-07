@@ -1,5 +1,6 @@
 package com.baayso.commons.http;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Map;
 
@@ -24,6 +25,8 @@ public final class OkHttpClientUtils {
 
     private static final Logger log = Log.get();
 
+    private static final OkHttpClient client = new OkHttpClient();
+
     // 让工具类彻底不可以实例化
     private OkHttpClientUtils() {
         throw new Error("工具类不可以实例化！");
@@ -40,8 +43,6 @@ public final class OkHttpClientUtils {
      * @since 1.0.0
      */
     public static String post(String url, Map<String, String> params) {
-        OkHttpClient client = new OkHttpClient();
-
         // 参数
         FormBody.Builder builder = new FormBody.Builder();
         // params.forEach((k, v) -> formBodyBuilder.add(k, v));
@@ -76,8 +77,7 @@ public final class OkHttpClientUtils {
      * @since 1.0.0
      */
     public static String get(String url) {
-        OkHttpClient client = new OkHttpClient();
-
+        // 请求
         Request request = new Request.Builder() //
                 .url(url) //
                 .get() //
@@ -105,22 +105,26 @@ public final class OkHttpClientUtils {
      * @since 1.0.0
      */
     public static String readResponse(Response response) {
-        String bodyStr = "";
 
         if (response == null) {
-            return bodyStr;
+            return "";
         }
+
+        StringBuilder data = new StringBuilder();
 
         ResponseBody body = response.body();
 
-        try {
-            bodyStr = body.string();
+        try (BufferedReader reader = new BufferedReader(body.charStream())) {
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                data.append(line).append('\n');
+            }
         }
-        catch (IOException e) {
-            log.error(e.getMessage(), e);
+        catch (Exception e) {
+            log.error("读取HTTP响应结果异常！", e);
         }
 
-        return bodyStr;
+        return data.toString();
     }
 
 }
