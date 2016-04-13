@@ -7,6 +7,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import okhttp3.Response;
+
 /**
  * Test class for {@link com.baayso.commons.http.OkHttpClientUtils}.
  *
@@ -34,9 +36,9 @@ public class OkHttpClientUtilsTest {
         Map<String, String> params = new HashMap<>();
         params.put("CHN", "CHN");
 
-        String body = OkHttpClientUtils.post("http://www.baidu.com", params);
+        Response response = OkHttpClientUtils.post("http://www.baidu.com", params);
 
-        System.out.println(body);
+        System.out.println(OkHttpClientUtils.readResponse(response));
     }
 
     /**
@@ -46,9 +48,9 @@ public class OkHttpClientUtilsTest {
      */
     @Test
     public void testGet() {
-        String body = OkHttpClientUtils.get("https://github.com/baayso");
+        Response response = OkHttpClientUtils.get("https://github.com/baayso");
 
-        System.out.println(body);
+        System.out.println(OkHttpClientUtils.readResponse(response));
     }
 
 }

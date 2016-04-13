@@ -38,11 +38,11 @@ public final class OkHttpClientUtils {
      * @param url    访问url
      * @param params 访问参数
      *
-     * @return 响应内容
+     * @return {@linkplain okhttp3.Response}
      *
      * @since 1.0.0
      */
-    public static String post(String url, Map<String, String> params) {
+    public static Response post(String url, Map<String, String> params) {
         // 参数
         FormBody.Builder builder = new FormBody.Builder();
         // params.forEach((k, v) -> formBodyBuilder.add(k, v));
@@ -64,7 +64,7 @@ public final class OkHttpClientUtils {
             log.error(e.getMessage(), e);
         }
 
-        return readResponse(response);
+        return response;
     }
 
     /**
@@ -72,11 +72,11 @@ public final class OkHttpClientUtils {
      *
      * @param url 访问url
      *
-     * @return 响应内容
+     * @return {@linkplain okhttp3.Response}
      *
      * @since 1.0.0
      */
-    public static String get(String url) {
+    public static Response get(String url) {
         // 请求
         Request request = new Request.Builder() //
                 .url(url) //
@@ -92,7 +92,7 @@ public final class OkHttpClientUtils {
             log.error(e.getMessage(), e);
         }
 
-        return readResponse(response);
+        return response;
     }
 
     /**
