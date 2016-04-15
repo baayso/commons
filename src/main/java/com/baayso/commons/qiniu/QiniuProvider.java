@@ -8,13 +8,15 @@ import org.slf4j.Logger;
 import com.baayso.commons.log.Log;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
+import com.qiniu.processing.OperationManager;
 import com.qiniu.storage.BucketManager;
+import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.BatchStatus;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
 
 /**
- * 七牛云存储。
+ * 七牛云存储操作封装。
  *
  * @author ChenFangjie (2014/12/16 16:30:41)
  * @since 1.0.0
@@ -39,8 +41,16 @@ public class QiniuProvider {
     private String returnBody; // 上传成功后，自定义七牛云最终返回給上传端（在指定returnUrl时是携带在跳转路径参数中）的数据
     private String persistentPipeline; // 转码队列名，资源上传成功后，触发转码时指定独立的队列进行转码。为空则表示使用公用队列，处理速度比较慢。建议使用专用队列
 
+    private Auth             auth;             // 密钥配置
+    private UploadManager    uploadManager;    // 上传对象
+    private BucketManager    bucketManager;    // 空间资源管理对象
+    private OperationManager operationManager; // 触发持久化处理对象
 
     public QiniuProvider() {
+        this.auth = Auth.create(this.accessKey, this.secretKey);
+        this.uploadManager = new UploadManager();
+        this.bucketManager = new BucketManager(this.auth);
+        this.operationManager = new OperationManager(this.auth);
     }
 
     public QiniuProvider(QiniuConfigurable config) {
@@ -54,6 +64,11 @@ public class QiniuProvider {
         this.privateBucketName = config.privateBucketName();
         this.privateBucketDomain = config.privateBucketDomain();
         this.privateBucketHttpsDomain = config.privateBucketHttpsDomain();
+
+        this.auth = Auth.create(this.accessKey, this.secretKey);
+        this.uploadManager = new UploadManager();
+        this.bucketManager = new BucketManager(this.auth);
+        this.operationManager = new OperationManager(this.auth);
     }
 
     /**
@@ -150,10 +165,8 @@ public class QiniuProvider {
 
         // String url2 = "http://abd.resdet.com/dfe/hg.jpg?imageView2/1/w/100";
 
-        Auth auth = Auth.create(this.accessKey, this.secretKey);
-
         // urlSigned
-        String downloadUrl = auth.privateDownloadUrl(url.toString(), expiresTime);
+        String downloadUrl = this.auth.privateDownloadUrl(url.toString(), expiresTime);
 
         return downloadUrl;
     }
@@ -377,10 +390,8 @@ public class QiniuProvider {
             }
         }
 
-        Auth auth = Auth.create(this.accessKey, this.secretKey);
-
         // 请确保bucket已经存在
-        String uptoken = auth.uploadToken(bucketName, null, expiresTime, putPolicy);
+        String uptoken = this.auth.uploadToken(bucketName, null, expiresTime, putPolicy);
 
         return uptoken;
     }
@@ -399,12 +410,10 @@ public class QiniuProvider {
      * @since 1.0.0
      */
     private boolean renameFile(String bucket, String oldKey, String newKey) {
-        Auth dummyAuth = Auth.create(this.accessKey, this.secretKey);
-        BucketManager bucketManager = new BucketManager(dummyAuth);
-
         boolean isSuccess = false;
+
         try {
-            bucketManager.rename(bucket, oldKey, newKey);
+            this.bucketManager.rename(bucket, oldKey, newKey);
             isSuccess = true;
         }
         catch (QiniuException e) {
@@ -429,12 +438,10 @@ public class QiniuProvider {
      * @since 1.0.0
      */
     private boolean deleteFile(String bucket, String key) {
-        Auth dummyAuth = Auth.create(this.accessKey, this.secretKey);
-        BucketManager bucketManager = new BucketManager(dummyAuth);
-
         boolean isSuccess = false;
+
         try {
-            bucketManager.delete(bucket, key);
+            this.bucketManager.delete(bucket, key);
             isSuccess = true;
         }
         catch (QiniuException e) {
@@ -459,17 +466,15 @@ public class QiniuProvider {
      * @since 1.0.0
      */
     private boolean deleteFiles(String bucket, List<String> keys) {
-        Auth dummyAuth = Auth.create(this.accessKey, this.secretKey);
-        BucketManager bucketManager = new BucketManager(dummyAuth);
-
         BucketManager.Batch ops = new BucketManager.Batch();
+
         for (String key : keys) {
             ops.delete(bucket, key);
         }
 
         int i = 1;
         try {
-            Response r = bucketManager.batch(ops);
+            Response r = this.bucketManager.batch(ops);
             BatchStatus[] bs = r.jsonToObject(BatchStatus[].class);
             for (BatchStatus b : bs) {
                 if (b.code == 200) {
@@ -570,6 +575,21 @@ public class QiniuProvider {
 
     public void setPersistentPipeline(String persistentPipeline) {
         this.persistentPipeline = persistentPipeline;
+    }
+
+    // ================================================================================================================== //
+    // ================================================================================================================== //
+
+    public OperationManager getOperationManager() {
+        return operationManager;
+    }
+
+    public BucketManager getBucketManager() {
+        return bucketManager;
+    }
+
+    public UploadManager getUploadManager() {
+        return uploadManager;
     }
 
 }
