@@ -47,10 +47,6 @@ public class QiniuProvider {
     private OperationManager operationManager; // 触发持久化处理对象
 
     public QiniuProvider() {
-        this.auth = Auth.create(this.accessKey, this.secretKey);
-        this.uploadManager = new UploadManager();
-        this.bucketManager = new BucketManager(this.auth);
-        this.operationManager = new OperationManager(this.auth);
     }
 
     public QiniuProvider(QiniuConfigurable config) {
@@ -64,7 +60,14 @@ public class QiniuProvider {
         this.privateBucketName = config.privateBucketName();
         this.privateBucketDomain = config.privateBucketDomain();
         this.privateBucketHttpsDomain = config.privateBucketHttpsDomain();
+    }
 
+    /**
+     * 初始化。
+     *
+     * @since 1.0.0
+     */
+    public void init() {
         this.auth = Auth.create(this.accessKey, this.secretKey);
         this.uploadManager = new UploadManager();
         this.bucketManager = new BucketManager(this.auth);
