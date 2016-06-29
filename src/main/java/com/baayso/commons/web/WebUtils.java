@@ -82,6 +82,7 @@ public final class WebUtils {
         response.setContentType("application/json; charset=UTF-8");
         response.setHeader("Pragma", "no-cache"); // HTTP/1.0 caches might not implement Cache-Control and might only implement Pragma: no-cache
         response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("Access-Control-Allow-Origin", "*"); // CORS
         response.setDateHeader("Expires", 0);
         response.setStatus(httpStatusCode);
 
@@ -91,6 +92,29 @@ public final class WebUtils {
         catch (Exception e) {
             log.error("输出json数据到客户端出错！", e);
         }
+    }
+
+    /**
+     * 获取客户端访问路径，且包含查询字符串（如果有）。
+     *
+     * @param request {@linkplain javax.servlet.http.HttpServletRequest}
+     *
+     * @return 访问路径
+     *
+     * @since 1.1.0
+     */
+    public static String getUrl(HttpServletRequest request) {
+        // 获取正在访问的url
+        String url = null;
+
+        if (null != request.getQueryString()) {
+            url = String.format("%s?%s", request.getRequestURI(), request.getQueryString());
+        }
+        else {
+            url = request.getRequestURI();
+        }
+
+        return url;
     }
 
 }
