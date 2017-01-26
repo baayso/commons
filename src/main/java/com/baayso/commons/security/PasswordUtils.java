@@ -1,7 +1,7 @@
 package com.baayso.commons.security;
 
-import org.springside.modules.utils.Digests;
-import org.springside.modules.utils.Encodes;
+import org.springside.modules.utils.text.EncodeUtil;
+import org.springside.modules.utils.text.HashUtil;
 
 /**
  * 密码工具类。
@@ -37,7 +37,7 @@ public class PasswordUtils {
             return false;
         }
 
-        return password.equals(encryptPassword(enterPassword, Encodes.decodeHex(salt)));
+        return password.equals(encryptPassword(enterPassword, EncodeUtil.decodeHex(salt)));
     }
 
     /**
@@ -51,9 +51,9 @@ public class PasswordUtils {
      * @since 1.0.0
      */
     public static String encryptPassword(String plainPassword, byte[] salt) {
-        byte[] hashPassword = Digests.sha1(plainPassword.getBytes(), salt, HASH_ITERATIONS);
+        byte[] hashPassword = HashUtil.sha1(plainPassword.getBytes(), salt, HASH_ITERATIONS);
 
-        return Encodes.encodeHex(hashPassword);
+        return EncodeUtil.encodeHex(hashPassword);
     }
 
     /**
@@ -62,7 +62,7 @@ public class PasswordUtils {
      * @since 1.0.0
      */
     public static byte[] generateSalt() {
-        return Digests.generateSalt(SALT_SIZE);
+        return HashUtil.generateSalt(SALT_SIZE);
     }
 
 }

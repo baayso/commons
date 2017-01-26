@@ -5,7 +5,7 @@ import java.util.Arrays;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springside.modules.utils.Encodes;
+import org.springside.modules.utils.text.EncodeUtil;
 
 import static org.junit.Assert.assertTrue;
 
@@ -39,7 +39,7 @@ public class PasswordUtilsTest {
     @Test
     public void testGenerateSalt() {
         System.out.println(Arrays.toString(PasswordUtils.generateSalt()));
-        System.out.println(Encodes.encodeHex(PasswordUtils.generateSalt()));
+        System.out.println(EncodeUtil.encodeHex(PasswordUtils.generateSalt()));
     }
 
     /**
@@ -50,7 +50,7 @@ public class PasswordUtilsTest {
     @Test
     public void testEncryptPassword() {
         byte[] bSalt = PasswordUtils.generateSalt();
-        String salt = Encodes.encodeHex(bSalt);
+        String salt = EncodeUtil.encodeHex(bSalt);
 
         System.out.println(salt);
 
