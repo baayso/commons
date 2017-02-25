@@ -10,7 +10,11 @@ public enum CommonResponseStatus implements ResponseStatus {
 
     ILLEGAL_DATA(11010032, "非法数据"),
 
-    UNKNOWN_ERROR(11010064, "未知错误");
+    UNKNOWN_ERROR(11010064, "未知错误"),
+
+    MISSING_DATA_TOKEN(11010096, "缺少dataToken参数"),
+
+    INVALID_DATA_TOKEN(110100128, "验证数据摘要不通过");
 
 
     private final int    value;
