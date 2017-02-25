@@ -139,7 +139,7 @@ public class FtpUtils implements Closeable {
 
         if (files.length != 1) {
             log.info("远程文件不存在");
-            return DownloadStatus.RemoteFileNotExist;
+            return DownloadStatus.REMOTE_FILE_NOT_EXIST;
 
         }
 
@@ -153,7 +153,7 @@ public class FtpUtils implements Closeable {
             // 判断本地文件大小是否大于远程文件大小
             if (localSize >= lRemoteSize) {
                 log.info("本地文件大于远程文件，下载中止");
-                return DownloadStatus.LocalFileBiggerThanRemoteFile;
+                return DownloadStatus.LOCAL_FILE_BIGGER_THAN_REMOTE_FILE;
             }
 
             // 进行断点续传，并记录状态
@@ -188,10 +188,10 @@ public class FtpUtils implements Closeable {
             boolean isDo = this.ftpClient.completePendingCommand();
 
             if (isDo) {
-                result = DownloadStatus.DownloadFromBreakSuccess;
+                result = DownloadStatus.DOWNLOAD_FROM_BREAK_SUCCESS;
             }
             else {
-                result = DownloadStatus.DownloadFromBreakFailed;
+                result = DownloadStatus.DOWNLOAD_FROM_BREAK_FAILED;
             }
 
         }
@@ -226,10 +226,10 @@ public class FtpUtils implements Closeable {
             boolean upNewStatus = this.ftpClient.completePendingCommand();
 
             if (upNewStatus) {
-                result = DownloadStatus.DownloadNewSuccess;
+                result = DownloadStatus.DOWNLOAD_NEW_SUCCESS;
             }
             else {
-                result = DownloadStatus.DownloadNewFailed;
+                result = DownloadStatus.DOWNLOAD_NEW_FAILED;
             }
         }
 

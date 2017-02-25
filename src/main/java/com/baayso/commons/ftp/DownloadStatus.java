@@ -9,21 +9,21 @@ package com.baayso.commons.ftp;
 public enum DownloadStatus {
 
     /** 远程文件不存在 */
-    RemoteFileNotExist,
+    REMOTE_FILE_NOT_EXIST,
 
     /** 下载文件成功 */
-    DownloadNewSuccess,
+    DOWNLOAD_NEW_SUCCESS,
 
     /** 下载文件失败 */
-    DownloadNewFailed,
+    DOWNLOAD_NEW_FAILED,
 
     /** 本地文件大于远程文件 */
-    LocalFileBiggerThanRemoteFile,
+    LOCAL_FILE_BIGGER_THAN_REMOTE_FILE,
 
     /** 断点续传成功 */
-    DownloadFromBreakSuccess,
+    DOWNLOAD_FROM_BREAK_SUCCESS,
 
     /** 断点续传失败 */
-    DownloadFromBreakFailed
+    DOWNLOAD_FROM_BREAK_FAILED
 
 }
