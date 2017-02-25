@@ -383,15 +383,15 @@ public class FtpUtils implements Closeable {
         if (remote.contains("/")) {
             remoteFileName = remote.substring(remote.lastIndexOf("/") + 1);
             // 创建服务器远程目录结构，创建失败直接返回
-            if (this.createDirectory(remote, this.ftpClient) == UploadStatus.CreateDirectoryFailed) {
-                return UploadStatus.CreateDirectoryFailed;
+            if (this.createDirectory(remote, this.ftpClient) == UploadStatus.CREATE_DIRECTORY_FAILED) {
+                return UploadStatus.CREATE_DIRECTORY_FAILED;
             }
         }
 
         BufferedInputStream bufferedInputStream = new BufferedInputStream(stream);
 
         if (this.ftpClient.storeFile(remoteFileName, bufferedInputStream)) {
-            result = UploadStatus.UploadNewFileSuccess;
+            result = UploadStatus.UPLOAD_NEW_FILE_SUCCESS;
         }
 
         return result;
@@ -425,8 +425,8 @@ public class FtpUtils implements Closeable {
         if (remote.contains("/")) {
             remoteFileName = remote.substring(remote.lastIndexOf("/") + 1);
             // 创建服务器远程目录结构，创建失败直接返回
-            if (createDirectory(remote, this.ftpClient) == UploadStatus.CreateDirectoryFailed) {
-                return UploadStatus.CreateDirectoryFailed;
+            if (createDirectory(remote, this.ftpClient) == UploadStatus.CREATE_DIRECTORY_FAILED) {
+                return UploadStatus.CREATE_DIRECTORY_FAILED;
             }
         }
 
@@ -438,19 +438,19 @@ public class FtpUtils implements Closeable {
             File f = new File(local);
             long localSize = f.length();
             if (remoteSize == localSize) { // 文件存在
-                return UploadStatus.FileExits;
+                return UploadStatus.FILE_EXITS;
             }
             else if (remoteSize > localSize) {
-                return UploadStatus.RemoteFileBiggerThanLocalFile;
+                return UploadStatus.REMOTE_FILE_BIGGER_THAN_LOCAL_FILE;
             }
 
             // 尝试移动文件内读取指针,实现断点续传
             result = uploadFile(remoteFileName, f, this.ftpClient, remoteSize);
 
             // 如果断点续传没有成功，则删除服务器上文件，重新上传
-            if (result == UploadStatus.UploadFromBreakFailed) {
+            if (result == UploadStatus.UPLOAD_FROM_BREAK_FAILED) {
                 if (!this.ftpClient.deleteFile(remoteFileName)) {
-                    return UploadStatus.DeleteRemoteFailed;
+                    return UploadStatus.DELETE_REMOTE_FAILED;
                 }
 
                 result = uploadFile(remoteFileName, f, this.ftpClient, 0);
@@ -475,7 +475,7 @@ public class FtpUtils implements Closeable {
      */
 
     public UploadStatus createDirectory(String remote, FTPClient ftpClient) throws IOException {
-        UploadStatus status = UploadStatus.CreateDirectorySuccess;
+        UploadStatus status = UploadStatus.CREATE_DIRECTORY_SUCCESS;
 
         String directory = remote.substring(0, remote.lastIndexOf("/") + 1);
 
@@ -502,7 +502,7 @@ public class FtpUtils implements Closeable {
                     else {
                         log.info("创建目录失败");
 
-                        return UploadStatus.CreateDirectoryFailed;
+                        return UploadStatus.CREATE_DIRECTORY_FAILED;
                     }
                 }
 
@@ -578,10 +578,10 @@ public class FtpUtils implements Closeable {
         boolean result = ftpClient.completePendingCommand();
 
         if (remoteSize > 0) {
-            status = result ? UploadStatus.UploadFromBreakSuccess : UploadStatus.UploadFromBreakFailed;
+            status = result ? UploadStatus.UPLOAD_FROM_BREAK_SUCCESS : UploadStatus.UPLOAD_FROM_BREAK_FAILED;
         }
         else {
-            status = result ? UploadStatus.UploadNewFileSuccess : UploadStatus.UploadNewFileFailed;
+            status = result ? UploadStatus.UPLOAD_NEW_FILE_SUCCESS : UploadStatus.UPLOAD_NEW_FILE_FAILED;
         }
 
         return status;

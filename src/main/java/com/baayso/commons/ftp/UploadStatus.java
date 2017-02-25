@@ -9,30 +9,30 @@ package com.baayso.commons.ftp;
 public enum UploadStatus {
 
     /** 远程服务器相应目录创建失败 */
-    CreateDirectoryFailed,
+    CREATE_DIRECTORY_FAILED,
 
     /** 远程服务器创建目录成功 */
-    CreateDirectorySuccess,
+    CREATE_DIRECTORY_SUCCESS,
 
     /** 上传新文件成功 */
-    UploadNewFileSuccess,
+    UPLOAD_NEW_FILE_SUCCESS,
 
     /** 上传新文件失败 */
-    UploadNewFileFailed,
+    UPLOAD_NEW_FILE_FAILED,
 
     /** 文件已经存在 */
-    FileExits,
+    FILE_EXITS,
 
     /** 远程文件大于本地文件 */
-    RemoteFileBiggerThanLocalFile,
+    REMOTE_FILE_BIGGER_THAN_LOCAL_FILE,
 
     /** 断点续传成功 */
-    UploadFromBreakSuccess,
+    UPLOAD_FROM_BREAK_SUCCESS,
 
     /** 断点续传失败 */
-    UploadFromBreakFailed,
+    UPLOAD_FROM_BREAK_FAILED,
 
     /** 删除远程文件失败 */
-    DeleteRemoteFailed
+    DELETE_REMOTE_FAILED
 
 }
