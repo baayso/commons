@@ -17,7 +17,7 @@ public class CustomSerializationRedisSerializer implements RedisSerializer<Objec
     private final Serializer serializer;
 
     /**
-     * Creates a new {@link CustomSerializationRedisSerializer} using the default serializer.
+     * Creates a new {@link CustomSerializationRedisSerializer} using the default serializer({@link FSTSerializer}).
      *
      * @since 1.0.0
      */
