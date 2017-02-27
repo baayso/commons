@@ -40,11 +40,11 @@ public class FSTSerializer implements Serializer {
 
         byte[] result = null;
 
-        ByteArrayOutputStream bytesOutputStream = new ByteArrayOutputStream(128);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream(128);
 
-        try (FSTObjectOutput fstOutputStream = new FSTObjectOutput(bytesOutputStream)) {
-            fstOutputStream.writeObject(obj);
-            result = bytesOutputStream.toByteArray();
+        try (FSTObjectOutput out = new FSTObjectOutput(stream)) {
+            out.writeObject(obj);
+            result = stream.toByteArray();
         }
         catch (IOException e) {
             log.error("Failed to serialize.", e);
@@ -64,8 +64,8 @@ public class FSTSerializer implements Serializer {
 
         Object result = null;
 
-        try (FSTObjectInput fstObjectInput = new FSTObjectInput(new ByteArrayInputStream(bytes))) {
-            result = fstObjectInput.readObject();
+        try (FSTObjectInput in = new FSTObjectInput(new ByteArrayInputStream(bytes))) {
+            result = in.readObject();
         }
         catch (ClassNotFoundException e) {
             log.error("Class of a serialized object cannot be found.", e);

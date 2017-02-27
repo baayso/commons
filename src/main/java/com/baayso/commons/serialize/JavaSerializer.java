@@ -39,11 +39,11 @@ public class JavaSerializer implements Serializer {
 
         byte[] result = null;
 
-        ByteArrayOutputStream bytesOutputStream = new ByteArrayOutputStream(128);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream(128);
 
-        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(bytesOutputStream)) {
-            objectOutputStream.writeObject(obj);
-            result = bytesOutputStream.toByteArray();
+        try (ObjectOutputStream out = new ObjectOutputStream(stream)) {
+            out.writeObject(obj);
+            result = stream.toByteArray();
         }
         catch (IOException e) {
             log.error("Failed to serialize.", e);
@@ -63,8 +63,8 @@ public class JavaSerializer implements Serializer {
 
         Object result = null;
 
-        try (ObjectInputStream objectOutputStream = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
-            result = objectOutputStream.readObject();
+        try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(bytes))) {
+            result = in.readObject();
         }
         catch (ClassNotFoundException e) {
             log.error("Class of a serialized object cannot be found.", e);
