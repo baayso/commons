@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -173,8 +174,21 @@ public class Validator {
      *
      * @since 1.0.0
      */
-    private boolean isBoolean(String value) {
-        return Boolean.parseBoolean(value);
+    public boolean isBoolean(String value) {
+        boolean result = true;
+
+        if (!this.required(value)) {
+            result = false;
+        }
+        else {
+            value = value.toLowerCase();
+
+            if (!Objects.equals(Boolean.TRUE.toString(), value) && !Objects.equals(Boolean.FALSE.toString(), value)) {
+                result = false;
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -464,7 +478,7 @@ public class Validator {
      * @since 1.0.0
      */
     public boolean isEmail(String email) {
-        String regex = "^[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[\\w](?:[\\w-]*[\\w])?$";
+        String regex = "^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
 
         return this.validateByRegex(email, regex);
     }
