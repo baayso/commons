@@ -19,6 +19,9 @@ public class Validator {
     private static final String DEFAULT_DATE_PATTERN     = "yyyy-MM-dd";
     private static final String DEFAULT_DATETIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
+    private static final String SORT_ASCENDING  = "ASC";
+    private static final String SORT_DESCENDING = "DESC";
+
     /**
      * 验证字符串是否为null或""。
      *
@@ -181,9 +184,35 @@ public class Validator {
             result = false;
         }
         else {
-            value = value.toLowerCase();
+            value = value.toLowerCase();  // 转小写
 
             if (!Objects.equals(Boolean.TRUE.toString(), value) && !Objects.equals(Boolean.FALSE.toString(), value)) {
+                result = false;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * 验证给定的字符串是否为排序值。
+     *
+     * @param value 需要进行验证的字符串
+     *
+     * @return 此字符串是排序值时返回 true
+     *
+     * @since 1.0.0
+     */
+    public boolean isSortOrder(String value) {
+        boolean result = true;
+
+        if (!this.required(value)) {
+            result = false;
+        }
+        else {
+            value = value.toUpperCase(); // 转大写
+
+            if (!Objects.equals(SORT_ASCENDING, value) && !Objects.equals(SORT_DESCENDING, value)) {
                 result = false;
             }
         }
