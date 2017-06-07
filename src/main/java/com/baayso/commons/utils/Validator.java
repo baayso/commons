@@ -23,11 +23,11 @@ public class Validator {
     private static final String SORT_DESCENDING = "DESC";
 
     /**
-     * 验证字符串是否为null或""。
+     * 验证字符串是否为null、"" 或 " "。
      *
      * @param value 需要进行验证的字符串
      *
-     * @return 当字符串不为null或""时返回 true
+     * @return 当字符串不为null、"" 或 " " 时返回 true
      *
      * @since 1.0.0
      */
