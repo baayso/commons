@@ -391,6 +391,67 @@ public class Validator {
     }
 
     /**
+     * 验证给定的字符串长度；最多可以输入 max 个字符。
+     *
+     * @param str 需要进行验证的字符串
+     * @param max 最大长度
+     *
+     * @return 此字符串符合长度要求时返回 true
+     *
+     * @since 1.0.0
+     */
+    public boolean maxLength(String str, int max) {
+        boolean result = true;
+
+        if (StringUtils.length(str) > max) {
+            result = false;
+        }
+
+        return result;
+    }
+
+    /**
+     * 验证给定的字符串长度；最少要输入 min 个字符。
+     *
+     * @param str 需要进行验证的字符串，传入null值将返回 false
+     * @param min 最小长度
+     *
+     * @return 此字符串符合长度要求时返回 true
+     *
+     * @since 1.0.0
+     */
+    public boolean minLength(String str, int min) {
+        boolean result = true;
+
+        if (StringUtils.length(str) < min) {
+            result = false;
+        }
+
+        return result;
+    }
+
+    /**
+     * 验证给定的字符串长度；请输入长度在 min 到 max 之间的字符串。
+     *
+     * @param str 需要进行验证的字符串
+     * @param min 最小长度
+     * @param max 最大长度
+     *
+     * @return 此字符串符合长度要求时返回 true
+     *
+     * @since 1.0.0
+     */
+    public boolean rangeLength(String str, int min, int max) {
+        boolean result = true;
+
+        if (StringUtils.length(str) < min || StringUtils.length(str) > max) {
+            result = false;
+        }
+
+        return result;
+    }
+
+    /**
      * 验证给定的字符串是否匹配给定的正则表达式。
      *
      * @param str   需要进行验证的字符串，传入null值将返回 false
