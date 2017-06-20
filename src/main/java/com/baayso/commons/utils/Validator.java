@@ -100,6 +100,17 @@ public class Validator {
         return this.isLong(value, Long.MIN_VALUE, Long.MAX_VALUE);
     }
 
+    /**
+     * 验证长整数。
+     *
+     * @param value 需要进行验证的字符串
+     * @param min   最小值
+     * @param max   最大值
+     *
+     * @return 此字符串是长整数并在指定的范围内返回 true
+     *
+     * @since 1.0.0
+     */
     public boolean isLong(String value, long min, long max) {
         boolean result = true;
 
