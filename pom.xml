@@ -320,7 +320,7 @@
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
-            <version>5.0.4</version>
+            <version>4.2.1</version>
             <optional>true</optional>
         </dependency>
         <dependency>
