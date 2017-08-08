@@ -2,6 +2,7 @@ package com.baayso.commons.spring;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -16,19 +17,20 @@ import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;
 import org.springframework.util.ClassUtils;
 
 import com.baayso.commons.log.Log;
 
 /**
- * 基于spring的扫描指定package和指定annotation的class扫描工具。
+ * 基于spring的扫描指定package和指定类型的class扫描工具。
  * <p/>
  * 源自 http://blog.csdn.net/chaijunkun/article/details/23921547
  *
  * @since 1.0.0
  */
-public class LoadPackageClasses {
+public class ClassScanner {
 
     private static final Logger log = Log.get();
 
@@ -36,7 +38,7 @@ public class LoadPackageClasses {
 
     private ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
 
-    private List<String> packagesList = new LinkedList<>();
+    private List<String> packages = new LinkedList<>();
 
     private List<TypeFilter> typeFilters = new LinkedList<>();
 
@@ -45,20 +47,40 @@ public class LoadPackageClasses {
     /**
      * 构造函数。
      *
-     * @param packagesToScan   指定哪些包需要被扫描，支持多个包"package.a,package.b"并对每个包都会递归搜索
-     * @param annotationFilter 指定扫描包中含有特定注解标记的bean，支持多个注解
+     * @param packages 指定哪些包需要被扫描，支持多个包"package.a,package.b"并对每个包都会递归搜索
+     * @param filters  类型过滤器，支持多个
      *
      * @since 1.0.0
      */
-    @SafeVarargs
-    public LoadPackageClasses(String[] packagesToScan, Class<? extends Annotation>... annotationFilter) {
-        if (packagesToScan != null) {
-            Collections.addAll(this.packagesList, packagesToScan);
+    public ClassScanner(String[] packages, TypeFilter... filters) {
+        if (packages != null) {
+            Collections.addAll(this.packages, packages);
         }
 
-        if (annotationFilter != null) {
-            for (Class<? extends Annotation> annotation : annotationFilter) {
-                this.typeFilters.add(new AnnotationTypeFilter(annotation, false));
+        if (filters != null) {
+            this.typeFilters.addAll(Arrays.asList(filters));
+        }
+    }
+
+    /**
+     * 构造函数。
+     *
+     * @param packages 指定哪些包需要被扫描，支持多个包"package.a,package.b"并对每个包都会递归搜索
+     * @param classes  指定扫描包中含有特定类型的bean，支持 Annotation 和 普通类型
+     *
+     * @since 1.0.0
+     */
+    @SuppressWarnings("unchecked")
+    public ClassScanner(String[] packages, Class<?>... classes) {
+        if (packages != null) {
+            Collections.addAll(this.packages, packages);
+        }
+
+        if (classes != null) {
+            for (Class<?> clazz : classes) {
+                TypeFilter filter = clazz.isAnnotation() ? new AnnotationTypeFilter((Class<? extends Annotation>) clazz, false) : new AssignableTypeFilter(clazz);
+
+                this.typeFilters.add(filter);
             }
         }
     }
@@ -75,8 +97,8 @@ public class LoadPackageClasses {
     public Set<Class<?>> getClassSet() throws IOException, ClassNotFoundException {
         this.classSet.clear();
 
-        if (!this.packagesList.isEmpty()) {
-            for (String pkg : this.packagesList) {
+        if (!this.packages.isEmpty()) {
+            for (String pkg : this.packages) {
                 String pattern = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + ClassUtils.convertClassNameToResourcePath(pkg) + RESOURCE_PATTERN;
                 Resource[] resources = this.resourcePatternResolver.getResources(pattern);
                 MetadataReaderFactory readerFactory = new CachingMetadataReaderFactory(this.resourcePatternResolver);
@@ -103,7 +125,7 @@ public class LoadPackageClasses {
         return this.classSet;
     }
 
-    /** 检查当前扫描到的class含有任何一个指定的注解标记 */
+    /** 检查当前扫描到的class含有任何一个指定的类型过滤器 */
     private boolean matchesEntityTypeFilter(MetadataReader reader, MetadataReaderFactory readerFactory) throws IOException {
         if (!this.typeFilters.isEmpty()) {
             for (TypeFilter filter : this.typeFilters) {
