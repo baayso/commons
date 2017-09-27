@@ -402,6 +402,29 @@ public class Validator {
     }
 
     /**
+     * 验证给定的字符串是否可以转换成特定枚举。
+     *
+     * @param cls 枚举
+     * @param str 给定的字符串
+     *
+     * @return 可以转换返回true，否则返回false
+     *
+     * @since 1.0.0
+     */
+    public boolean isEnum(Class cls, String str) {
+        boolean result = true;
+
+        try {
+            Enum.valueOf(cls, str);
+        }
+        catch (Exception ex) {
+            result = false;
+        }
+
+        return result;
+    }
+
+    /**
      * 验证给定的字符串长度；最多可以输入 max 个字符。
      *
      * @param str 需要进行验证的字符串
