@@ -657,4 +657,19 @@ public class Validator {
         return result;
     }
 
+    /**
+     * 验证给定的字符串是否浮点数（整数也可验证通过）。
+     *
+     * @param number 需要进行验证的字符串
+     *
+     * @return 此字符串是浮点数或者整数时返回 true
+     *
+     * @since 1.0.0
+     */
+    public boolean isFloatingNumber(String number) {
+        String regex = "^-?([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|0?\\.0+|0|\\d*)$";
+
+        return this.validateByRegex(number, regex);
+    }
+
 }
