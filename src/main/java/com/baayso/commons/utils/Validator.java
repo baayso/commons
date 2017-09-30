@@ -525,7 +525,7 @@ public class Validator {
     }
 
     /**
-     * 验证给定的字符串是否为：中文、字母和数字。
+     * 验证给定的字符串是否为：中文、字母或者数字。
      *
      * @param value 需要进行验证的字符串
      * @param min   最小长度
@@ -542,7 +542,7 @@ public class Validator {
     }
 
     /**
-     * 验证给定的字符串是否为：字母、数字和下划线。
+     * 验证给定的字符串是否为：字母、数字或者下划线。
      *
      * @param value 需要进行验证的字符串
      * @param min   最小长度
@@ -559,7 +559,7 @@ public class Validator {
     }
 
     /**
-     * 验证给定的字符串是否为：字母和数字。
+     * 验证给定的字符串是否为：字母或者数字。
      *
      * @param value 需要进行验证的字符串
      * @param min   最小长度
@@ -576,7 +576,7 @@ public class Validator {
     }
 
     /**
-     * 验证给定的字符串是否为：数字和中划线。
+     * 验证给定的字符串是否为：数字或者中划线。
      *
      * @param value 需要进行验证的字符串
      * @param min   最小长度
