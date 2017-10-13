@@ -14,7 +14,7 @@ public enum CommonResponseStatus implements ResponseStatus {
 
     MISSING_DATA_TOKEN(11010096, "缺少dataToken参数"),
 
-    INVALID_DATA_TOKEN(110100128, "验证数据摘要不通过");
+    INVALID_DATA_TOKEN(11010128, "验证数据摘要不通过");
 
 
     private final int    value;
