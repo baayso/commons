@@ -34,13 +34,13 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <aspectj.version>1.8.10</aspectj.version>
-        <poi.version>3.16</poi.version>
-        <spring.version>4.3.10.RELEASE</spring.version>
-        <spring-data-commons.version>1.13.6.RELEASE</spring-data-commons.version>
-        <spring-data-redis.version>1.8.6.RELEASE</spring-data-redis.version>
+        <aspectj.version>1.8.12</aspectj.version>
+        <poi.version>3.17</poi.version>
+        <spring.version>4.3.12.RELEASE</spring.version>
+        <spring-data-commons.version>1.13.8.RELEASE</spring-data-commons.version>
+        <spring-data-redis.version>1.8.8.RELEASE</spring-data-redis.version>
         <springside.version>5.0.0-SNAPSHOT</springside.version>
-        <jackson.version>2.8.9</jackson.version>
+        <jackson.version>2.9.2</jackson.version>
         <logback.version>1.2.3</logback.version>
         <slf4j.version>1.7.25</slf4j.version>
     </properties>
@@ -243,7 +243,7 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.10</version>
+            <version>1.11</version>
             <optional>true</optional>
         </dependency>
         <dependency>
