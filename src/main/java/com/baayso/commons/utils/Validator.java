@@ -414,11 +414,16 @@ public class Validator {
     public boolean isEnum(Class cls, String str) {
         boolean result = true;
 
-        try {
-            Enum.valueOf(cls, str);
-        }
-        catch (Exception ex) {
+        if (!this.required(str)) {
             result = false;
+        }
+        else {
+            try {
+                Enum.valueOf(cls, str);
+            }
+            catch (Exception ex) {
+                result = false;
+            }
         }
 
         return result;
