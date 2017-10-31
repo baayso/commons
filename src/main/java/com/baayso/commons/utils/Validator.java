@@ -672,6 +672,15 @@ public class Validator {
      * @since 1.0.0
      */
     public boolean isFloatingNumber(String number) {
+
+        /*
+            ^-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0|\d*)$   正负浮点数   整数    .0
+
+            ^([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0|\d*)$     正浮点数     整数    .0
+
+            ^([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0\.0+|0|\d*)$      正浮点数     整数   0.0
+         */
+
         String regex = "^-?([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|0?\\.0+|0|\\d*)$";
 
         return this.validateByRegex(number, regex);
