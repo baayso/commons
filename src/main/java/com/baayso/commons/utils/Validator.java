@@ -16,8 +16,9 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class Validator {
 
-    private static final String DEFAULT_DATE_PATTERN     = "yyyy-MM-dd";
-    private static final String DEFAULT_DATETIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    private static final String DEFAULT_SHORT_DATE_PATTERN = "yyyy-MM";
+    private static final String DEFAULT_DATE_PATTERN       = "yyyy-MM-dd";
+    private static final String DEFAULT_DATETIME_PATTERN   = "yyyy-MM-dd HH:mm:ss";
 
     private static final String SORT_ASCENDING  = "ASC";
     private static final String SORT_DESCENDING = "DESC";
@@ -232,6 +233,34 @@ public class Validator {
     }
 
     /**
+     * 验证日期（要求为：yyyy-MM 格式且必须是有效的日期）。
+     *
+     * @param value 需要进行验证的字符串
+     *
+     * @return 此字符串是日期时返回 true
+     *
+     * @since 1.0.0
+     */
+    public boolean isShortDate(String value) {
+        return this.isDate(value, DEFAULT_SHORT_DATE_PATTERN);
+    }
+
+    /**
+     * 验证日期（要求为：yyyy-MM 格式且必须是有效的日期）。
+     *
+     * @param value 需要进行验证的字符串
+     * @param min   最小日期
+     * @param max   最大日期
+     *
+     * @return 此字符串是日期并在指定的日期范围内返回 true
+     *
+     * @since 1.0.0
+     */
+    public boolean isShortDate(String value, Date min, Date max) {
+        return this.isDate(value, min, max, DEFAULT_SHORT_DATE_PATTERN);
+    }
+
+    /**
      * 验证日期（要求为：yyyy-MM-dd格式且必须是有效的日期）。
      *
      * @param value 需要进行验证的字符串
@@ -245,7 +274,7 @@ public class Validator {
     }
 
     /**
-     * 验证日期（要求为：yyyy-MM-dd格式且必须是有效的日期）。
+     * 验证日期（要求为：yyyy-MM-dd 格式且必须是有效的日期）。
      *
      * @param value 需要进行验证的字符串
      * @param min   最小日期
@@ -260,7 +289,7 @@ public class Validator {
     }
 
     /**
-     * 验证日期（要求为：yyyy-MM-dd格式且必须是有效的日期）。
+     * 验证日期（要求为：yyyy-MM-dd 格式且必须是有效的日期）。
      *
      * @param value 需要进行验证的字符串
      * @param min   最小日期
