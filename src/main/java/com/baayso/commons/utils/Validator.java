@@ -570,7 +570,7 @@ public class Validator {
      * @since 1.0.0
      */
     public boolean isChineseAndEnglishAndNumber(String value, int min, int max) {
-        String regex = "^[a-zA-Z0-9_-—\\u4e00-\\u9fa5]*$";
+        String regex = "^[a-zA-Z0-9-_—\\u4e00-\\u9fa5]*$";
 
         return this.validateByRegex(value, regex, min, max);
     }
