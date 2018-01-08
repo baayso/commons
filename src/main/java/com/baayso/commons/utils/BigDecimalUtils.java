@@ -28,7 +28,7 @@ public class BigDecimalUtils {
      *
      * @since 1.0.0
      */
-    public BigDecimal divide(BigDecimal dividend, BigDecimal divisor) {
+    public static BigDecimal divide(BigDecimal dividend, BigDecimal divisor) {
         return BigDecimal.ZERO.equals(divisor) ? BigDecimal.ZERO : dividend.divide(divisor, DEFAULT_SCALE, DEFAULT_ROUNDING_MODE);
     }
 
@@ -45,7 +45,7 @@ public class BigDecimalUtils {
      *
      * @since 1.0.0
      */
-    public BigDecimal divide(BigDecimal dividend, BigDecimal divisor, int scale) {
+    public static BigDecimal divide(BigDecimal dividend, BigDecimal divisor, int scale) {
         return BigDecimal.ZERO.equals(divisor) ? BigDecimal.ZERO : dividend.divide(divisor, scale, DEFAULT_ROUNDING_MODE);
     }
 
@@ -62,7 +62,7 @@ public class BigDecimalUtils {
      *
      * @since 1.0.0
      */
-    public BigDecimal divide(BigDecimal dividend, BigDecimal divisor, RoundingMode roundingMode) {
+    public static BigDecimal divide(BigDecimal dividend, BigDecimal divisor, RoundingMode roundingMode) {
         return BigDecimal.ZERO.equals(divisor) ? BigDecimal.ZERO : dividend.divide(divisor, DEFAULT_SCALE, roundingMode);
     }
 
@@ -79,7 +79,7 @@ public class BigDecimalUtils {
      *
      * @since 1.0.0
      */
-    public BigDecimal divide(BigDecimal dividend, BigDecimal divisor, int scale, RoundingMode roundingMode) {
+    public static BigDecimal divide(BigDecimal dividend, BigDecimal divisor, int scale, RoundingMode roundingMode) {
         return BigDecimal.ZERO.equals(divisor) ? BigDecimal.ZERO : dividend.divide(divisor, scale, roundingMode);
     }
 
