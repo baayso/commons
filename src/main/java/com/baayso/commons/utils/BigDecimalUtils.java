@@ -12,7 +12,11 @@ import java.math.RoundingMode;
 public class BigDecimalUtils {
 
     /** 默认小数规模：保留2位小数 */
-    public final static int          DEFAULT_SCALE         = 2;
+    public final static int DEFAULT_SCALE = 2;
+
+    /** 计算比例时使用的小数规模：保留4位小数 */
+    public final static int RATIO_SCALE = 4;
+
     /** 默认舍入方式：四舍五入 */
     public final static RoundingMode DEFAULT_ROUNDING_MODE = RoundingMode.HALF_UP;
 
