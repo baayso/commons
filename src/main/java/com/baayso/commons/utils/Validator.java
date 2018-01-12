@@ -559,7 +559,7 @@ public class Validator {
     }
 
     /**
-     * 验证给定的字符串是否为：中文、字母、下划线、中划线或者数字。
+     * 验证给定的字符串是否为：中文、字母、下划线、中划线、小括号或者数字。
      *
      * @param value 需要进行验证的字符串
      * @param min   最小长度
@@ -570,7 +570,7 @@ public class Validator {
      * @since 1.0.0
      */
     public boolean isChineseAndEnglishAndNumber(String value, int min, int max) {
-        String regex = "^[a-zA-Z0-9-_—\\u4e00-\\u9fa5]*$";
+        String regex = "^[a-zA-Z0-9-_—()（）\\u4e00-\\u9fa5]*$";
 
         return this.validateByRegex(value, regex, min, max);
     }
