@@ -464,7 +464,7 @@ public class Validator {
      * @param str 需要进行验证的字符串
      * @param max 最大长度
      *
-     * @return 此字符串符合长度要求时返回 true
+     * @return 此字符串符合长度符合要求时返回 true
      *
      * @since 1.0.0
      */
@@ -484,7 +484,7 @@ public class Validator {
      * @param str 需要进行验证的字符串，传入null值将返回 false
      * @param min 最小长度
      *
-     * @return 此字符串符合长度要求时返回 true
+     * @return 此字符串符合长度符合要求时返回 true
      *
      * @since 1.0.0
      */
@@ -505,7 +505,7 @@ public class Validator {
      * @param min 最小长度
      * @param max 最大长度
      *
-     * @return 此字符串符合长度要求时返回 true
+     * @return 此字符串符合长度符合要求时返回 true
      *
      * @since 1.0.0
      */
@@ -573,6 +573,43 @@ public class Validator {
         String regex = "^[a-zA-Z0-9-_—()（）\\u4e00-\\u9fa5]*$";
 
         return this.validateByRegex(value, regex, min, max);
+    }
+
+    /**
+     * 验证给定的字符串是否包含空格。<br>
+     * <pre>
+     * hasSpace(null)      = true
+     * hasSpace("")        = true
+     * hasSpace(" ")       = true
+     * hasSpace("  bob  ") = true
+     * hasSpace("b ob")    = true
+     * hasSpace("bob")     = false
+     * </pre>
+     *
+     * @param str 需要进行验证的字符串
+     *
+     * @return 给定的字符串包含空格时返回 true
+     *
+     * @since 1.0.0
+     */
+    public boolean hasSpace(final String str) {
+        int strLen;
+
+        if (str == null || (strLen = str.length()) == 0) {
+            return true;
+        }
+
+        boolean result = false;
+
+        for (int i = 0; i < strLen; i++) {
+            if (Character.isWhitespace(str.charAt(i))) {
+                result = true;
+
+                break;
+            }
+        }
+
+        return result;
     }
 
     /**
