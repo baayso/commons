@@ -559,23 +559,6 @@ public class Validator {
     }
 
     /**
-     * 验证给定的字符串是否为：中文、字母、下划线、中划线、小括号或者数字。
-     *
-     * @param value 需要进行验证的字符串
-     * @param min   最小长度
-     * @param max   最大长度
-     *
-     * @return 此字符串满足要求并且符合长度要求时返回 true
-     *
-     * @since 1.0.0
-     */
-    public boolean isChineseAndEnglishAndNumber(String value, int min, int max) {
-        String regex = "^[a-zA-Z0-9-_—()（）\\u4e00-\\u9fa5]*$";
-
-        return this.validateByRegex(value, regex, min, max);
-    }
-
-    /**
      * 验证给定的字符串是否包含空格。<br>
      * <pre>
      * hasSpace(null)      = true
@@ -610,6 +593,45 @@ public class Validator {
         }
 
         return result;
+    }
+
+    /**
+     * 验证给定的字符串是否为允许字符。<br>
+     * 非法字符有：空格（包括制表符、换行符）、百分号（%）、下划线（_）
+     *
+     * @param str 需要进行验证的字符串
+     * @param min 最小长度
+     * @param max 最大长度
+     *
+     * @return 此字符串满足要求并且符合长度要求时返回 true
+     *
+     * @since 1.0.0
+     */
+    public boolean isAllowCharacter(final String str, final int min, final int max) {
+        if (hasSpace(str)) {
+            return false;
+        }
+
+        String regex = "^[^\\s%_]+$";
+
+        return this.validateByRegex(str, regex, min, max);
+    }
+
+    /**
+     * 验证给定的字符串是否为：中文、字母、下划线、中划线、小括号或者数字。
+     *
+     * @param value 需要进行验证的字符串
+     * @param min   最小长度
+     * @param max   最大长度
+     *
+     * @return 此字符串满足要求并且符合长度要求时返回 true
+     *
+     * @since 1.0.0
+     */
+    public boolean isChineseAndEnglishAndNumber(String value, int min, int max) {
+        String regex = "^[a-zA-Z0-9-_—()（）\\u4e00-\\u9fa5]*$";
+
+        return this.validateByRegex(value, regex, min, max);
     }
 
     /**
@@ -750,6 +772,17 @@ public class Validator {
         String regex = "^-?([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|0?\\.0+|0|\\d*)$";
 
         return this.validateByRegex(number, regex);
+    }
+
+    public static void main(String[] args) {
+        Validator v = new Validator();
+
+        System.out.println(v.isAllowCharacter("　中　", 1, 20));
+        System.out.println(v.isAllowCharacter("    ", 1, 20));
+        System.out.println(v.isAllowCharacter("  中 ", 1, 20));
+        System.out.println(v.isAllowCharacter("中_", 1, 20));
+        System.out.println(v.isAllowCharacter("%中", 1, 20));
+        System.out.println(v.isAllowCharacter("正常……&*（）()#@!^-+=——---？《》。，、,.<>/';][{}｛｝【】~```~、||、", 1, 100));
     }
 
 }
