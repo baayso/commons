@@ -84,6 +84,10 @@ public class BigDecimalUtils {
      * @since 1.0.0
      */
     public static BigDecimal divide(BigDecimal dividend, BigDecimal divisor, int scale, RoundingMode roundingMode) {
+        if (dividend == null || divisor == null) {
+            return BigDecimal.ZERO;
+        }
+
         return BigDecimal.ZERO.compareTo(dividend) == 0 || BigDecimal.ZERO.compareTo(divisor) == 0 //
                 ? BigDecimal.ZERO //
                 : dividend.divide(divisor, scale, roundingMode);
