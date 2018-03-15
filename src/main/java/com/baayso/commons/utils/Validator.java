@@ -144,7 +144,15 @@ public class Validator {
      * @since 1.0.0
      */
     public boolean isDouble(String value) {
-        return this.isDouble(value, Double.MIN_VALUE, Double.MAX_VALUE);
+        /*
+         * double d1 = Double.MAX_VALUE; // 能表示的最大正数
+         * double d0 = Double.MIN_VALUE; // 能表示的最小正数
+         * double d2 = -Double.MAX_VALUE; // 能表示的最小负数
+         * double d3 = Double.POSITIVE_INFINITY; // （无穷大正无穷)
+         * double d4 = Double.NEGATIVE_INFINITY; // 无穷小(负无穷)
+         */
+
+        return this.isDouble(value, -Double.MAX_VALUE, Double.MAX_VALUE);
     }
 
     /**
@@ -783,6 +791,12 @@ public class Validator {
         System.out.println(v.isAllowCharacter("中_", 1, 20));
         System.out.println(v.isAllowCharacter("%中", 1, 20));
         System.out.println(v.isAllowCharacter("正常……&*（）()#@!^-+=——---？《》。，、,.<>/';][{}｛｝【】~```~、||、", 1, 100));
+
+        System.out.println("====================================");
+
+        System.out.println(v.isDouble("0"));
+        System.out.println(v.isDouble("0", -Double.MAX_VALUE, Double.MAX_VALUE));
+        System.out.println(v.isDouble("0", 0, 99.9999));
     }
 
 }
