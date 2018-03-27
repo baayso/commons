@@ -12,6 +12,8 @@ import com.baayso.commons.mybatis.mapper.CommonMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import tk.mybatis.mapper.entity.Example;
+
 /**
  * 通用业务逻辑。
  *
@@ -101,6 +103,19 @@ public abstract class AbstractCommonService<T, ID extends Serializable> {
     }
 
     /**
+     * 根据Example条件删除数据。
+     *
+     * @param example 查询对象
+     *
+     * @return 受影响的行数
+     *
+     * @since 1.0.0
+     */
+    public int removeByExample(Example example) {
+        return this.dao.deleteByExample(example);
+    }
+
+    /**
      * 根据主键字符串进行删除（使用 IN 操作符）。
      *
      * @param ids 如 "1,2,3,4"
@@ -150,6 +165,44 @@ public abstract class AbstractCommonService<T, ID extends Serializable> {
     }
 
     /**
+     * 根据Example条件更新实体属性不为null的值。
+     *
+     * @param entity  封装了更新内容的实体
+     * @param example 查询对象
+     *
+     * @return 受影响的行数
+     *
+     * @since 1.0.0
+     */
+    public int updateByExample(T entity, Example example) {
+        return this.updateByExample(entity, example, false);
+    }
+
+    /**
+     * 根据Example条件更新实体。
+     *
+     * @param entity       封装了更新内容的实体
+     * @param example      查询对象
+     * @param isUpdateNull 是否更新为null的属性
+     *
+     * @return 受影响的行数
+     *
+     * @since 1.0.0
+     */
+    public int updateByExample(T entity, Example example, boolean isUpdateNull) {
+        int count;
+
+        if (isUpdateNull) {
+            count = this.dao.updateByExample(entity, example);
+        }
+        else {
+            count = this.dao.updateByExampleSelective(entity, example);
+        }
+
+        return count;
+    }
+
+    /**
      * 根据实体中的属性查询总数，查询条件使用等号。
      *
      * @param entity 封装了查询条件的实体
@@ -160,6 +213,19 @@ public abstract class AbstractCommonService<T, ID extends Serializable> {
      */
     public int count(T entity) {
         return this.dao.selectCount(entity);
+    }
+
+    /**
+     * 根据Example条件进行查询总数。
+     *
+     * @param example 查询对象
+     *
+     * @return 查询总数
+     *
+     * @since 1.0.0
+     */
+    public int countByExample(Example example) {
+        return this.dao.selectCountByExample(example);
     }
 
     /**
@@ -189,6 +255,19 @@ public abstract class AbstractCommonService<T, ID extends Serializable> {
     }
 
     /**
+     * 根据Example条件进行查询，只能有一个返回值，有多个结果是抛出异常。
+     *
+     * @param example 查询对象
+     *
+     * @return 查询到的实体
+     *
+     * @since 1.0.0
+     */
+    public T getByExample(Example example) {
+        return this.dao.selectOneByExample(example);
+    }
+
+    /**
      * 查询全部数据。
      *
      * @return 查询到的全部数据
@@ -210,6 +289,19 @@ public abstract class AbstractCommonService<T, ID extends Serializable> {
      */
     public List<T> list(T entity) {
         return this.dao.select(entity);
+    }
+
+    /**
+     * 根据Example条件进行查询。
+     *
+     * @param example 查询对象
+     *
+     * @return 查询到的数据列表
+     *
+     * @since 1.0.0
+     */
+    public List<T> listByExample(Example example) {
+        return this.dao.selectByExample(example);
     }
 
     /**
