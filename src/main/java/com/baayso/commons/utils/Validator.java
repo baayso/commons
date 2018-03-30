@@ -16,12 +16,12 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class Validator {
 
-    private static final String DEFAULT_SHORT_DATE_PATTERN = "yyyy-MM";
-    private static final String DEFAULT_DATE_PATTERN       = "yyyy-MM-dd";
-    private static final String DEFAULT_DATETIME_PATTERN   = "yyyy-MM-dd HH:mm:ss";
+    public static final String DEFAULT_SHORT_DATE_PATTERN = "yyyy-MM";
+    public static final String DEFAULT_DATE_PATTERN       = "yyyy-MM-dd";
+    public static final String DEFAULT_DATETIME_PATTERN   = "yyyy-MM-dd HH:mm:ss";
 
-    private static final String SORT_ASCENDING  = "ASC";
-    private static final String SORT_DESCENDING = "DESC";
+    public static final String SORT_ASCENDING  = "ASC";
+    public static final String SORT_DESCENDING = "DESC";
 
     /**
      * 验证字符串是否为null、"" 或 " "。
@@ -797,6 +797,15 @@ public class Validator {
         System.out.println(v.isDouble("0"));
         System.out.println(v.isDouble("0", -Double.MAX_VALUE, Double.MAX_VALUE));
         System.out.println(v.isDouble("0", 0, 99.9999));
+
+        System.out.println("====================================");
+
+        System.out.println(v.isInt("0"));
+        System.out.println(v.isLong("0"));
+
+        System.out.println("====================================");
+
+        System.out.println(v.isDate("2018-3-5"));
     }
 
 }
