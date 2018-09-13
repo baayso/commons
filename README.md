@@ -44,7 +44,7 @@ Common library.
 
 ## [log:](https://github.com/baayso/commons/tree/master/src/main/java/com/baayso/commons/log)
 
-[Log](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/log/Log.java)
+[Log](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/log/Log.java) 对 slf4j Logger 的简单封装
 
 ****
 <br/>
@@ -55,7 +55,7 @@ Common library.
 
 [CommonMapper](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/mybatis/mapper/CommonMapper.java)
 
-[EnumValueTypeHandler](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/mybatis/type/EnumValueTypeHandler.java)
+[EnumValueTypeHandler](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/mybatis/type/EnumValueTypeHandler.java) 自定义Mybatis处理枚举转换类
 
 [ValueEnum](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/mybatis/type/ValueEnum.java)
 
@@ -64,11 +64,11 @@ Common library.
 
 ## [qiniu:](https://github.com/baayso/commons/tree/master/src/main/java/com/baayso/commons/qiniu)
 
-[QiniuConfigurable](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/qiniu/QiniuConfigurable.java)
+[QiniuConfigurable](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/qiniu/QiniuConfigurable.java) 七牛云存储配置
 
-[QiniuConfigurationAdapter](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/qiniu/QiniuConfigurationAdapter.java)
+[QiniuConfigurationAdapter](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/qiniu/QiniuConfigurationAdapter.java) Abstract adapter class for the QiniuConfigurable interface
 
-[QiniuProvider](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/qiniu/QiniuProvider.java)
+[QiniuProvider](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/qiniu/QiniuProvider.java) 七牛云存储操作封装
 
 ****
 <br/>
