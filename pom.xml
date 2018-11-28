@@ -94,10 +94,9 @@
         </dependency>
         <!-- JSR349 BeanValidator -->
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>5.3.4.Final</version>
-            <optional>true</optional>
+            <version>6.0.13.Final</version>
         </dependency>
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
