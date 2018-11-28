@@ -806,6 +806,10 @@ public class Validator {
         System.out.println("====================================");
 
         System.out.println(v.isDate("2018-3-5"));
+
+        System.out.println("====================================");
+
+        System.out.println("isShortDate: " + v.isShortDate("2018-3"));
     }
 
 }
