@@ -7,6 +7,9 @@ import org.springside.modules.utils.time.DateFormatUtil;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 /**
  * Json工具类。
@@ -20,14 +23,23 @@ public class JsonUtils extends JsonMapper {
 
     static {
         INSTANCE = new JsonUtils();
-        // JsonUtils.INSTANCE.getMapper().setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        // JsonUtils.INSTANCE.getMapper().enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 
-        JsonUtils.INSTANCE.getMapper().setDateFormat(new SimpleDateFormat(DateFormatUtil.PATTERN_DEFAULT_ON_SECOND));
+        ObjectMapper mapper = INSTANCE.getMapper();
 
-        JsonUtils.INSTANCE.getMapper().configure(JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN, true);
-        // JsonUtils.INSTANCE.getMapper().configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
-        // JsonUtils.INSTANCE.getMapper().configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
+        // mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        // mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+
+        mapper.setDateFormat(new SimpleDateFormat(DateFormatUtil.PATTERN_DEFAULT_ON_SECOND));
+
+        mapper.configure(JsonGenerator.Feature.WRITE_BIGDECIMAL_AS_PLAIN, true);
+        mapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, true);
+        mapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
+
+        // default-property-inclusion
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
+        // 序列化为JSON时将 Long 转为 String（全局配置）
+        // mapper.registerModule(new SimpleModule().addSerializer(Long.class, ToStringSerializer.instance));
     }
 
     public JsonUtils() {
