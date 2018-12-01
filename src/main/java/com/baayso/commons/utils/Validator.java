@@ -1,5 +1,6 @@
 package com.baayso.commons.utils;
 
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -448,7 +449,7 @@ public class Validator {
      *
      * @since 1.0.0
      */
-    public boolean isEnum(Class cls, String str) {
+    public boolean isEnum(Class<? extends Enum> cls, String str) {
         boolean result = true;
 
         if (!this.required(str)) {
@@ -461,6 +462,37 @@ public class Validator {
             catch (Exception ex) {
                 result = false;
             }
+        }
+
+        return result;
+    }
+
+    /**
+     * 验证给定的数值是否可以转换成特定枚举。
+     *
+     * @param cls   枚举
+     * @param value 给定的数值
+     *
+     * @return 可以转换返回true，否则返回false
+     *
+     * @since 1.0.0
+     */
+    public boolean isEnum(Class<? extends Enum> cls, int value) {
+        boolean result = true;
+
+        try {
+            Method method = cls.getMethod("valueOf", int.class);
+
+            // 开启快速获取（关闭反射安全检查）
+            if (!method.isAccessible()) {
+                method.setAccessible(true);
+            }
+
+            method.invoke(null, value);
+
+        }
+        catch (Exception ex) {
+            result = false;
         }
 
         return result;
