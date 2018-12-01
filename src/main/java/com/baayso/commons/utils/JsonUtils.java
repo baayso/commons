@@ -38,6 +38,8 @@ public class JsonUtils extends JsonMapper {
         // default-property-inclusion
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
+        mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+
         // 序列化为JSON时将 Long 转为 String（全局配置）
         // mapper.registerModule(new SimpleModule().addSerializer(Long.class, ToStringSerializer.instance));
     }
