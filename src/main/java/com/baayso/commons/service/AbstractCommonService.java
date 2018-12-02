@@ -15,7 +15,9 @@ import com.github.pagehelper.PageInfo;
 import tk.mybatis.mapper.entity.Example;
 
 /**
- * 通用业务逻辑。
+ * 通用Service，封装了对数据库的单表操作。
+ * <p>
+ * 基于：MyBatis通用Mapper3（https://github.com/abel533/Mapper/tree/3.5.x）
  *
  * @author ChenFangjie (2015/12/5 13:02)
  * @since 1.0.0
