@@ -1,6 +1,15 @@
 # commons
 Common library.
 
+<p align="center">
+    <a target="_blank" href="https://travis-ci.org/baayso/commons">
+        <img src="https://travis-ci.org/baayso/commons.svg?branch=master" ></img>
+    </a>
+    <a target="_blank" href="https://www.oracle.com/technetwork/java/javase/downloads/index.html">
+        <img src="https://img.shields.io/badge/JDK-1.8+-green.svg" ></img>
+    </a>
+</p>
+
 ****
 <br/>
 
@@ -51,9 +60,9 @@ Common library.
 
 ## [mybatis:](https://github.com/baayso/commons/tree/master/src/main/java/com/baayso/commons/mybatis)
 
-[BaseMapper](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/mybatis/mapper/BaseMapper.java)
+~~[BaseMapper](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/mybatis/mapper/BaseMapper.java)~~ 已删除（与 Mybatis-Plus 3.x API 冲突，建议放至具体业务项目中），基于[Mybatis-Plus 2.x](https://github.com/baomidou/mybatis-plus/tree/2.x)的**自定义通用Mapper**
 
-[CommonMapper](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/mybatis/mapper/CommonMapper.java)
+[CommonMapper](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/mybatis/mapper/CommonMapper.java) 基于[MyBatis通用Mapper3](https://github.com/abel533/Mapper/tree/3.5.x)的**自定义通用Mapper**
 
 [EnumValueTypeHandler](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/mybatis/type/EnumValueTypeHandler.java) 自定义Mybatis处理枚举转换类
 
@@ -105,9 +114,9 @@ Common library.
 
 ## [service:](https://github.com/baayso/commons/tree/master/src/main/java/com/baayso/commons/service)
 
-[AbstractBaseService](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/service/AbstractBaseService.java)
+~~[AbstractBaseService](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/service/AbstractBaseService.java)~~ 已删除（与 Mybatis-Plus 3.x API 冲突，建议放至具体业务项目中），基于[Mybatis-Plus 2.x](https://github.com/baomidou/mybatis-plus/tree/2.x)的**通用Service，封装了对数据库的单表操作**
 
-[AbstractCommonService](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/service/AbstractCommonService.java)
+[AbstractCommonService](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/service/AbstractCommonService.java) 基于[MyBatis通用Mapper3](https://github.com/abel533/Mapper/tree/3.5.x)的**通用Service，封装了对数据库的单表操作**
 
 ****
 <br/>
@@ -132,7 +141,7 @@ Common library.
 
 ## [utils:](https://github.com/baayso/commons/tree/master/src/main/java/com/baayso/commons/utils)
 
-[BigDecimalUtils](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/utils/BigDecimalUtils.java)
+[BigDecimalUtils](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/utils/BigDecimalUtils.java) BigDecimal 工具类
 
 [CloneUtils](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/utils/CloneUtils.java) 使用序列化实现对象的（深）拷贝
 
@@ -140,11 +149,11 @@ Common library.
 
 [FileUtils](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/utils/FileUtils.java)
 
-[JsonUtils](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/utils/JsonUtils.java)
+[JsonUtils](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/utils/JsonUtils.java) 基于 Jackson JSON 的 JSON工具类
 
-[ObjectId](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/utils/ObjectId.java)
+~~[ObjectId](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/utils/ObjectId.java)~~ MongoDB ObjectId，建议使用[Twitter-Snowflake](https://gitee.com/yu120/sequence)
 
-[Validator](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/utils/Validator.java)
+[Validator](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/utils/Validator.java) 参数检验器
 
 ****
 <br/>
