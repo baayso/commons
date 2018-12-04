@@ -1,7 +1,7 @@
 package com.baayso.commons.security;
 
-import org.springside.modules.utils.text.EncodeUtil;
-import org.springside.modules.utils.text.HashUtil;
+import com.vip.vjtools.vjkit.text.EncodeUtil;
+import com.vip.vjtools.vjkit.text.HashUtil;
 
 /**
  * 密码工具类。

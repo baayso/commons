@@ -5,7 +5,8 @@ import java.util.Arrays;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springside.modules.utils.text.EncodeUtil;
+
+import com.vip.vjtools.vjkit.text.EncodeUtil;
 
 import static org.junit.Assert.assertTrue;
 

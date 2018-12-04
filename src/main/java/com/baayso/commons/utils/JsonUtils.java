@@ -2,14 +2,13 @@ package com.baayso.commons.utils;
 
 import java.text.SimpleDateFormat;
 
-import org.springside.modules.utils.mapper.JsonMapper;
-import org.springside.modules.utils.time.DateFormatUtil;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.vip.vjtools.vjkit.mapper.JsonMapper;
+import com.vip.vjtools.vjkit.time.DateFormatUtil;
 
 /**
  * Json工具类。

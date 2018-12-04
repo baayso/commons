@@ -9,11 +9,11 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import org.springside.modules.utils.text.EncodeUtil;
 
 import com.baayso.commons.exception.ApiException;
 import com.baayso.commons.tool.CommonResponseStatus;
 import com.baayso.commons.web.BodyReaderHttpServletRequestWrapper;
+import com.vip.vjtools.vjkit.text.EncodeUtil;
 
 /**
  * 验证数据摘要拦截器。
