@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.baayso.commons.utils;
+package com.baayso.commons.sequence;
 
 import java.io.Serializable;
 import java.net.NetworkInterface;
