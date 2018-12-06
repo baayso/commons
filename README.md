@@ -92,9 +92,20 @@ Common library.
 ****
 <br/>
 
+## [sequence:](https://github.com/baayso/commons/tree/master/src/main/java/com/baayso/commons/sequence)
+
+[ObjectId](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/sequence/ObjectId.java) MongoDB ObjectId
+
+[Sequence](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/sequence/Sequence.java) 基于Twitter的Snowflake算法实现分布式高效有序ID
+
+[SystemClock](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/sequence/SystemClock.java) 高并发场景下System.currentTimeMillis()的性能问题的优化
+
+****
+<br/>
+
 ## [serialize:](https://github.com/baayso/commons/tree/master/src/main/java/com/baayso/commons/serialize)
 
-[CustomSerializationRedisSerializer](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/serialize/redis/CustomSerializationRedisSerializer.java)
+[CustomSerializationRedisSerializer](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/serialize/redis/CustomSerializationRedisSerializer.java) 自定义Redis序列化器
 
 [FSTSerializer](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/serialize/FSTSerializer.java) 使用FST实现的序列化
 
@@ -145,8 +156,6 @@ Common library.
 [FileUtils](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/utils/FileUtils.java)
 
 [JsonUtils](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/utils/JsonUtils.java) 基于 Jackson JSON 的 JSON工具类
-
-~~[ObjectId](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/utils/ObjectId.java)~~ MongoDB ObjectId，建议使用[Twitter-Snowflake](https://gitee.com/yu120/sequence)
 
 [Validator](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/utils/Validator.java) 参数检验器
 
