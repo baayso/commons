@@ -7,8 +7,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 
 import com.baayso.commons.log.Log;
+import com.baayso.commons.web.MediaTypes;
 
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -33,9 +35,43 @@ public final class OkHttpClientUtils {
     }
 
     /**
+     * 发送XML参数格式的POST请求。
+     *
+     * @param url 访问URL
+     * @param xml XML格式请求参数
+     *
+     * @return {@linkplain okhttp3.Response}
+     *
+     * @since 3.0.0
+     */
+    public static Response postXml(String url, String xml) {
+        // 参数
+        RequestBody body = RequestBody.create(MediaType.parse(MediaTypes.APPLICATION_XML_UTF_8), xml);
+
+        return post(url, body);
+    }
+
+    /**
+     * 发送JSON参数格式的POST请求。
+     *
+     * @param url  访问URL
+     * @param json JSON格式请求参数
+     *
+     * @return {@linkplain okhttp3.Response}
+     *
+     * @since 3.0.0
+     */
+    public static Response postJson(String url, String json) {
+        // 参数
+        RequestBody body = RequestBody.create(MediaType.parse(MediaTypes.JSON_UTF_8), json);
+
+        return post(url, body);
+    }
+
+    /**
      * 发送POST请求。
      *
-     * @param url    访问url
+     * @param url    访问URL
      * @param params 访问参数
      *
      * @return {@linkplain okhttp3.Response}
@@ -45,14 +81,18 @@ public final class OkHttpClientUtils {
     public static Response post(String url, Map<String, String> params) {
         // 参数
         FormBody.Builder builder = new FormBody.Builder();
-        // params.forEach((k, v) -> formBodyBuilder.add(k, v));
+        // params.forEach((k, v) -> builder.add(k, v));
         params.forEach(builder::add);
         RequestBody requestBody = builder.build();
 
+        return post(url, requestBody);
+    }
+
+    private static Response post(String url, RequestBody body) {
         // 请求
         Request request = new Request.Builder() //
                 .url(url) //
-                .post(requestBody) //
+                .post(body) //
                 .build();
 
         Response response = null;
@@ -70,7 +110,7 @@ public final class OkHttpClientUtils {
     /**
      * 发送GET请求。
      *
-     * @param url 访问url
+     * @param url 访问URL
      *
      * @return {@linkplain okhttp3.Response}
      *
@@ -110,9 +150,13 @@ public final class OkHttpClientUtils {
             return "";
         }
 
-        StringBuilder data = new StringBuilder();
-
         ResponseBody body = response.body();
+
+        if (body == null) {
+            return "";
+        }
+
+        StringBuilder data = new StringBuilder();
 
         try (BufferedReader reader = new BufferedReader(body.charStream())) {
             String line = null;
