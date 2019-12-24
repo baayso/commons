@@ -1,14 +1,10 @@
 package com.baayso.commons.sequence;
 
-
-import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
-
-import org.apache.commons.lang3.StringUtils;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * 基于Twitter的Snowflake算法实现分布式高效有序ID生产黑科技(sequence)
+ * 基于Twitter的Snowflake算法实现分布式高效有序ID生产黑科技(sequence)——升级版Snowflake
  *
  * <br>
  * SnowFlake的结构如下(每部分用-分开):<br>
@@ -18,7 +14,7 @@ import org.apache.commons.lang3.StringUtils;
  * 1位标识，由于long基本类型在Java中是带符号的，最高位是符号位，正数是0，负数是1，所以id一般是正数，最高位是0<br>
  * <br>
  * 41位时间截(毫秒级)，注意，41位时间截不是存储当前时间的时间截，而是存储时间截的差值（当前时间截 - 开始时间截)
- * 得到的值），这里的的开始时间截，一般是我们的id生成器开始使用的时间，由我们程序来指定的（如下下面程序IdWorker类的startTime属性）。41位的时间截，可以使用69年，年T = (1L << 41) / (1000L * 60 * 60 * 24 * 365) = 69<br>
+ * 得到的值），这里的的开始时间截，一般是我们的id生成器开始使用的时间，由我们程序来指定的（如下START_TIME属性）。41位的时间截，可以使用69年，年T = (1L << 41) / (1000L * 60 * 60 * 24 * 365) = 69<br>
  * <br>
  * 10位的数据机器位，可以部署在1024个节点，包括5位dataCenterId和5位workerId<br>
  * <br>
@@ -27,190 +23,177 @@ import org.apache.commons.lang3.StringUtils;
  * <br>
  * 加起来刚好64位，为一个Long型。<br>
  * SnowFlake的优点是，整体上按照时间自增排序，并且整个分布式系统内不会产生ID碰撞(由数据中心ID和机器ID作区分)，并且效率较高，经测试，SnowFlake每秒能够产生26万ID左右。
+ * <p>
+ * <p>
+ * 特性：
+ * 1.支持自定义允许时间回拨的范围<p>
+ * 2.解决跨毫秒起始值每次为0开始的情况（避免末尾必定为偶数，而不便于取余使用问题）<p>
+ * 3.解决高并发场景中获取时间戳性能问题<p>
+ * 4.支撑根据IP末尾数据作为workerId
+ * 5.时间回拨方案思考：1024个节点中分配10个点作为时间回拨序号（连续10次时间回拨的概率较小）
  *
  * @author lry (https://gitee.com/yu120/sequence)
- *
+ * @version 3.0
  */
-public class Sequence {
-
-	/** 起始时间戳，用于用当前时间戳减去这个时间戳，算出偏移量 **/
-    private final long startTime = 1519740777809L;
-
-    /** workerId占用的位数5（表示只允许workId的范围为：0-1023）**/
-    private final long workerIdBits = 5L;
-    /** dataCenterId占用的位数：5 **/
-    private final long dataCenterIdBits = 5L;
-    /** 序列号占用的位数：12（表示只允许workId的范围为：0-4095）**/
-    private final long sequenceBits = 12L;
-
-    /** workerId可以使用的最大数值：31 **/
-    private final long maxWorkerId = -1L ^ (-1L << workerIdBits);
-    /** dataCenterId可以使用的最大数值：31 **/
-    private final long maxDataCenterId = -1L ^ (-1L << dataCenterIdBits);
-
-    private final long workerIdShift = sequenceBits;
-    private final long dataCenterIdShift = sequenceBits + workerIdBits;
-    private final long timestampLeftShift = sequenceBits + workerIdBits + dataCenterIdBits;
-
-    /** 用mask防止溢出:位与运算保证计算的结果范围始终是 0-4095 **/
-    private final long sequenceMask = -1L ^ (-1L << sequenceBits);
-
-    private long workerId;
-    private long dataCenterId;
-    private long sequence = 0L;
-    private long lastTimestamp = -1L;
-    private boolean isClock = true;
+public final class Sequence {
 
     /**
-     * 基于Snowflake创建分布式ID生成器
-     */
-    public Sequence() {
-        this.dataCenterId = getDataCenterId(this.maxDataCenterId);
-        this.workerId = getMaxWorkerId(this.dataCenterId, this.maxWorkerId);
+     * 起始时间戳
+     **/
+    private final static long START_TIME = 1519740777809L;
+
+    /**
+     * dataCenterId占用的位数：2
+     **/
+    private final static long DATA_CENTER_ID_BITS = 2L;
+    /**
+     * workerId占用的位数：8
+     **/
+    private final static long WORKER_ID_BITS      = 8L;
+    /**
+     * 序列号占用的位数：12（表示只允许workId的范围为：0-4095）
+     **/
+    private final static long SEQUENCE_BITS       = 12L;
+
+    /**
+     * workerId可以使用范围：0-255
+     **/
+    private final static long MAX_WORKER_ID      = ~(-1L << WORKER_ID_BITS);
+    /**
+     * dataCenterId可以使用范围：0-3
+     **/
+    private final static long MAX_DATA_CENTER_ID = ~(-1L << DATA_CENTER_ID_BITS);
+
+    private final static long WORKER_ID_SHIFT      = SEQUENCE_BITS;
+    private final static long DATA_CENTER_ID_SHIFT = SEQUENCE_BITS + WORKER_ID_BITS;
+    private final static long TIMESTAMP_LEFT_SHIFT = SEQUENCE_BITS + WORKER_ID_BITS + DATA_CENTER_ID_BITS;
+
+    /**
+     * 用mask防止溢出:位与运算保证计算的结果范围始终是 0-4095
+     **/
+    private final static long SEQUENCE_MASK = ~(-1L << SEQUENCE_BITS);
+
+    private final long workerId;
+    private final long dataCenterId;
+    private       long sequence      = 0L;
+    private       long lastTimestamp = -1L;
+
+    private static byte              LAST_IP = 0;
+    private final  boolean           clock;
+    private final  long              timeOffset;
+    private final  boolean           randomSequence;
+    private final  ThreadLocalRandom tlr     = ThreadLocalRandom.current();
+
+    public Sequence(long dataCenterId) {
+        this(dataCenterId, 0x000000FF & getLastIPAddress(), false, 5L, false);
+    }
+
+    public Sequence(long dataCenterId, boolean clock, boolean randomSequence) {
+        this(dataCenterId, 0x000000FF & getLastIPAddress(), clock, 5L, randomSequence);
     }
 
     /**
      * 基于Snowflake创建分布式ID生成器
-     * <p>
-     * 注：sequence
      *
-     * @param workerId     工作机器ID,数据范围为0~31
-     * @param dataCenterId 数据中心ID,数据范围为0~31
+     * @param dataCenterId   数据中心ID,数据范围为0~255
+     * @param workerId       工作机器ID,数据范围为0~3
+     * @param clock          true表示解决高并发下获取时间戳的性能问题
+     * @param timeOffset     允许时间回拨的毫秒量,建议5ms
+     * @param randomSequence true表示使用毫秒内的随机序列(超过范围则取余)
      */
-    public Sequence(long workerId, long dataCenterId) {
-
-        if (workerId > maxWorkerId || workerId < 0) {
-            throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
+    public Sequence(long dataCenterId, long workerId, boolean clock, long timeOffset, boolean randomSequence) {
+        if (dataCenterId > MAX_DATA_CENTER_ID || dataCenterId < 0) {
+            throw new IllegalArgumentException("Data Center Id can't be greater than " + MAX_DATA_CENTER_ID + " or less than 0");
         }
-
-        if (dataCenterId > maxDataCenterId || dataCenterId < 0) {
-            throw new IllegalArgumentException(String.format("dataCenter Id can't be greater than %d or less than 0", maxDataCenterId));
+        if (workerId > MAX_WORKER_ID || workerId < 0) {
+            throw new IllegalArgumentException("Worker Id can't be greater than " + MAX_WORKER_ID + " or less than 0");
         }
 
         this.workerId = workerId;
         this.dataCenterId = dataCenterId;
-    }
-
-    /**
-     * 获取 maxWorkerId
-     * <p>
-     * 代码来自: https://gitee.com/baomidou/mybatis-plus/blob/3.0/mybatis-plus-core/src/main/java/com/baomidou/mybatisplus/core/toolkit/Sequence.java#L103
-     */
-    protected static long getMaxWorkerId(long dataCenterId, long maxWorkerId) {
-
-        StringBuilder mpId = new StringBuilder().append(dataCenterId);
-
-        String name = ManagementFactory.getRuntimeMXBean().getName();
-
-        if (StringUtils.isNotEmpty(name)) {
-            /* GET jvm pid */
-            mpId.append(name.split("@")[0]);
-        }
-
-        /* MAC + PID 的 hashcode 获取16个低位 */
-        return (mpId.toString().hashCode() & 0xffff) % (maxWorkerId + 1);
-    }
-
-    /**
-     * 获取 数据标识id
-     * <p>
-     * 代码来自: https://gitee.com/baomidou/mybatis-plus/blob/3.0/mybatis-plus-core/src/main/java/com/baomidou/mybatisplus/core/toolkit/Sequence.java#L124
-     */
-    protected static long getDataCenterId(long maxDataCenterId) {
-        long id = 0L;
-
-        try {
-            InetAddress ip = InetAddress.getLocalHost();
-            NetworkInterface network = NetworkInterface.getByInetAddress(ip);
-
-            if (network == null) {
-                id = 1L;
-            }
-            else {
-                byte[] mac = network.getHardwareAddress();
-                if (null != mac) {
-                    id = ((0x000000FF & (long) mac[mac.length - 1]) | (0x0000FF00 & (((long) mac[mac.length - 2]) << 8))) >> 6;
-                    id = id % (maxDataCenterId + 1);
-                }
-            }
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Get dataCenterId Error.", e);
-        }
-
-        return id;
-    }
-
-    public Sequence setClock(boolean clock) {
-        this.isClock = clock;
-        return this;
+        this.clock = clock;
+        this.timeOffset = timeOffset;
+        this.randomSequence = randomSequence;
     }
 
     /**
      * 获取ID
      *
-     * @return
+     * @return long
      */
     public synchronized Long nextId() {
-        long timestamp = this.timeGen();
+        long currentTimestamp = this.timeGen();
 
-        // 闰秒：如果当前时间小于上一次ID生成的时间戳，说明系统时钟回退过这个时候应当抛出异常
-        if (timestamp < lastTimestamp) {
-            long offset = lastTimestamp - timestamp;
-            if (offset <= 5) {
-                try {
-                    this.wait(offset << 1);
-                    timestamp = this.timeGen();
-                    if (timestamp < lastTimestamp) {
-                        throw new RuntimeException(String.format("Clock moved backwards.  Refusing to generate id for %d milliseconds", offset));
-                    }
-                }
-                catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
+        // 闰秒：如果当前时间小于上一次ID生成的时间戳，说明系统时钟回退过，这个时候应当抛出异常
+        if (currentTimestamp < lastTimestamp) {
+            // 校验时间偏移回拨量
+            long offset = lastTimestamp - currentTimestamp;
+            if (offset > timeOffset) {
+                throw new RuntimeException("Clock moved backwards, refusing to generate id for [" + offset + "ms]");
             }
-            else {
-                throw new RuntimeException(String.format("Clock moved backwards.  Refusing to generate id for %d milliseconds", offset));
+
+            try {
+                // 时间回退timeOffset毫秒内，则允许等待2倍的偏移量后重新获取，解决小范围的时间回拨问题
+                this.wait(offset << 1);
+            }
+            catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            // 再次获取
+            currentTimestamp = this.timeGen();
+            // 再次校验
+            if (currentTimestamp < lastTimestamp) {
+                throw new RuntimeException("Clock moved backwards, refusing to generate id for [" + offset + "ms]");
             }
         }
 
-        // 解决跨毫秒生成ID序列号始终为偶数的缺陷:如果是同一时间生成的，则进行毫秒内序列
-        if (lastTimestamp == timestamp) {
+        // 同一毫秒内序列直接自增
+        if (lastTimestamp == currentTimestamp) {
+            // randomSequence为true表示随机生成允许范围内的序列起始值并取余数,否则毫秒内起始值为0L开始自增
+            long tempSequence = sequence + 1;
+            if (randomSequence && tempSequence > SEQUENCE_MASK) {
+                tempSequence = tempSequence % SEQUENCE_MASK;
+            }
+
             // 通过位与运算保证计算的结果范围始终是 0-4095
-            sequence = (sequence + 1) & sequenceMask;
+            sequence = tempSequence & SEQUENCE_MASK;
             if (sequence == 0) {
-                timestamp = this.tilNextMillis(lastTimestamp);
+                currentTimestamp = this.tilNextMillis(lastTimestamp);
             }
         }
         else {
-            // 时间戳改变，毫秒内序列重置
-            sequence = 0L;
+            // randomSequence为true表示随机生成允许范围内的序列起始值,否则毫秒内起始值为0L开始自增
+            sequence = randomSequence ? tlr.nextLong(SEQUENCE_MASK + 1) : 0L;
         }
 
-        lastTimestamp = timestamp;
+        lastTimestamp = currentTimestamp;
+        long currentOffsetTime = currentTimestamp - START_TIME;
 
         /*
          * 1.左移运算是为了将数值移动到对应的段(41、5、5，12那段因为本来就在最右，因此不用左移)
          * 2.然后对每个左移后的值(la、lb、lc、sequence)做位或运算，是为了把各个短的数据合并起来，合并成一个二进制数
          * 3.最后转换成10进制，就是最终生成的id
          */
-        return ((timestamp - startTime) << timestampLeftShift) |
-                (dataCenterId << dataCenterIdShift) |
-                (workerId << workerIdShift) |
+        return (currentOffsetTime << TIMESTAMP_LEFT_SHIFT) |
+                // 数据中心位
+                (dataCenterId << DATA_CENTER_ID_SHIFT) |
+                // 工作ID位
+                (workerId << WORKER_ID_SHIFT) |
+                // 毫秒序列化位
                 sequence;
     }
 
     /**
-     * 保证返回的毫秒数在参数之后(阻塞到下一个毫秒，直到获得新的时间戳)
+     * 保证返回的毫秒数在参数之后(阻塞到下一个毫秒，直到获得新的时间戳)——CAS
      *
-     * @param lastTimestamp
+     * @param lastTimestamp last timestamp
      *
-     * @return
+     * @return next millis
      */
     private long tilNextMillis(long lastTimestamp) {
         long timestamp = this.timeGen();
-
         while (timestamp <= lastTimestamp) {
+            // 如果发现时间回拨，则自动重新获取（可能会处于无限循环中）
             timestamp = this.timeGen();
         }
 
@@ -218,18 +201,36 @@ public class Sequence {
     }
 
     /**
-     * 获得系统当前毫秒数
+     * 获得系统当前毫秒时间戳
      *
-     * @return timestamp
+     * @return timestamp 毫秒时间戳
      */
     private long timeGen() {
-        if (isClock) {
-            // 解决高并发下获取时间戳的性能问题
-            return SystemClock.now();
+        return clock ? SystemClock.INSTANCE.currentTimeMillis() : System.currentTimeMillis();
+    }
+
+    /**
+     * 用IP地址最后几个字节标示
+     * <p>
+     * eg:192.168.1.30->30
+     *
+     * @return last IP
+     */
+    public static byte getLastIPAddress() {
+        if (LAST_IP != 0) {
+            return LAST_IP;
         }
-        else {
-            return System.currentTimeMillis();
+
+        try {
+            InetAddress inetAddress = InetAddress.getLocalHost();
+            byte[] addressByte = inetAddress.getAddress();
+            LAST_IP = addressByte[addressByte.length - 1];
         }
+        catch (Exception e) {
+            throw new RuntimeException("Unknown Host Exception", e);
+        }
+
+        return LAST_IP;
     }
 
 }

@@ -15,12 +15,12 @@ public class ContiPerfTest {
     @Rule
     public ContiPerfRule i = new ContiPerfRule();
 
-    private Sequence sequence = new Sequence();
+    Sequence sequence = new Sequence(0);
 
     @Test
     @PerfTest(invocations = 200000000, threads = 16)
     public void test1() throws Exception {
-        this.sequence.nextId();
+        sequence.nextId();
     }
 
 }

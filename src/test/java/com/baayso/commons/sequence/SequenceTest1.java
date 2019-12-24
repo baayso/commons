@@ -2,13 +2,16 @@ package com.baayso.commons.sequence;
 
 import org.junit.Test;
 
+/**
+ * @author lry (https://gitee.com/yu120/sequence)
+ */
 public class SequenceTest1 {
 
     @Test
     public void name() {
         try {
             int times = 0, maxTimes = 1000;
-            Sequence sequence = new Sequence();
+            Sequence sequence = new Sequence(0);
             for (int i = 0; i < maxTimes; i++) {
                 long id = sequence.nextId();
                 if (id % 2 == 0) {
