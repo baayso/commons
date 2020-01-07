@@ -46,7 +46,10 @@ import com.baayso.commons.log.Log;
  * <p>Instances of this class are immutable.</p>
  *
  * @mongodb.driver.manual core/object-id ObjectId
+ *
+ * @see com.baayso.commons.sequence.mongo.ObjectId
  */
+@Deprecated
 public final class ObjectId implements Comparable<ObjectId>, Serializable {
 
     private static final long serialVersionUID = 3670079982654483072L;
