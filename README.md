@@ -76,7 +76,7 @@
 
 ## [sequence:](https://github.com/baayso/commons/tree/master/src/main/java/com/baayso/commons/sequence)
 
-* [ObjectId](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/sequence/ObjectId.java) MongoDB ObjectId
+* [ObjectId](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/sequence/mongo/ObjectId.java) MongoDB ObjectId
 
 * [Sequence](https://github.com/baayso/commons/blob/master/src/main/java/com/baayso/commons/sequence/Sequence.java) 基于Twitter的Snowflake算法实现分布式高效有序ID
 
