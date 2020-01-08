@@ -15,9 +15,11 @@
     <groupId>com.baayso</groupId>
     <artifactId>commons</artifactId>
     <version>1.0.1.Alpha</version>
-    <name>commons</name>
+
+    <name>${project.artifactId}</name>
     <description>Common library</description>
     <url>https://github.com/baayso/commons</url>
+
     <packaging>jar</packaging>
 
     <repositories>
@@ -83,7 +85,6 @@
         <spring-data-commons.version>2.1.3.RELEASE</spring-data-commons.version>
         <spring-data-redis.version>2.1.3.RELEASE</spring-data-redis.version>
         <jackson.version>2.10.1</jackson.version>
-        <logback.version>1.2.3</logback.version>
         <slf4j.version>1.7.25</slf4j.version>
     </properties>
 
@@ -501,45 +502,9 @@
 
         <!-- LOGGING begin -->
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>${logback.version}</version>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>${logback.version}</version>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
-            <optional>true</optional>
-        </dependency>
-        <!-- 代码直接调用log4j会被桥接到slf4j -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>log4j-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-        <!-- 代码直接调用common-logging会被桥接到slf4j -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-        <!-- 代码直接调用java.util.logging会被桥接到slf4j -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jul-to-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
         <!-- LOGGING end -->
@@ -626,7 +591,8 @@
     </dependencies>
 
     <build>
-        <finalName>commons</finalName>
+        <finalName>${project.artifactId}</finalName>
+
         <plugins>
             <!-- compiler插件, 设定jdk版本 -->
             <plugin>
