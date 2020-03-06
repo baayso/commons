@@ -7,8 +7,10 @@ import com.vip.vjtools.vjkit.text.HashUtil;
  * 密码工具类。
  *
  * @author ChenFangjie (2014/12/30 9:44:08)
+ * @see com.baayso.commons.security.password.BCryptPasswordEncoder
  * @since 1.0.0
  */
+@Deprecated
 public class PasswordUtils {
 
     private static final String HASH_ALGORITHM  = "SHA-1";
