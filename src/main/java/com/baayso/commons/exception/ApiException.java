@@ -17,7 +17,7 @@ public class ApiException extends RuntimeException {
 
     private static final Logger log = Log.get();
 
-    public ResponseStatus responseStatus;
+    private ResponseStatus responseStatus;
 
     public ApiException() {
     }
@@ -34,6 +34,14 @@ public class ApiException extends RuntimeException {
         }
 
         return null;
+    }
+
+    public ResponseStatus getResponseStatus() {
+        return responseStatus;
+    }
+
+    public void setResponseStatus(ResponseStatus responseStatus) {
+        this.responseStatus = responseStatus;
     }
 
 }

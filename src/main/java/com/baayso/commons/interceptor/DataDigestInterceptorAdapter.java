@@ -11,7 +11,7 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.baayso.commons.exception.ApiException;
-import com.baayso.commons.tool.CommonResponseStatus;
+import com.baayso.commons.tool.BasicResponseStatus;
 import com.baayso.commons.web.BodyReaderHttpServletRequestWrapper;
 import com.vip.vjtools.vjkit.text.EncodeUtil;
 
@@ -31,7 +31,7 @@ public abstract class DataDigestInterceptorAdapter extends HandlerInterceptorAda
         String dataToken = requestWrapper.getParameter("dataToken");
 
         if (StringUtils.isAnyEmpty(dataToken)) {
-            throw new ApiException(CommonResponseStatus.MISSING_DATA_TOKEN);
+            throw new ApiException(BasicResponseStatus.DATA_TOKEN_MISSING);
         }
 
         String requestBody = StreamUtils.copyToString(requestWrapper.getInputStream(), StandardCharsets.UTF_8);
@@ -41,7 +41,7 @@ public abstract class DataDigestInterceptorAdapter extends HandlerInterceptorAda
         byte[] digest = DigestUtils.sha1(data);
 
         if (!StringUtils.equalsIgnoreCase(dataToken, EncodeUtil.encodeHex(digest))) {
-            throw new ApiException(CommonResponseStatus.INVALID_DATA_TOKEN);
+            throw new ApiException(BasicResponseStatus.DATA_TOKEN_CHECK_FAILED);
         }
 
         return super.preHandle(requestWrapper, response, handler);
