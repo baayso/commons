@@ -22,8 +22,33 @@ public class ApiException extends RuntimeException {
     public ApiException() {
     }
 
+    public ApiException(String message) {
+        super(message);
+    }
+
     public ApiException(ResponseStatus responseStatus) {
         super(responseStatus.getReason());
+        this.responseStatus = responseStatus;
+    }
+
+    public ApiException(int code, String message) {
+        super(message);
+
+        this.responseStatus = new ResponseStatus() {
+            @Override
+            public int value() {
+                return code;
+            }
+
+            @Override
+            public String getReason() {
+                return message;
+            }
+        };
+    }
+
+    public ApiException(ResponseStatus responseStatus, String message) {
+        super(message);
         this.responseStatus = responseStatus;
     }
 

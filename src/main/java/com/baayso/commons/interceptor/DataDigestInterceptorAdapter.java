@@ -28,7 +28,7 @@ public abstract class DataDigestInterceptorAdapter extends HandlerInterceptorAda
         // 包装HttpServletRequest，防止流读取一次后就没有了
         BodyReaderHttpServletRequestWrapper requestWrapper = new BodyReaderHttpServletRequestWrapper(request);
 
-        String dataToken = requestWrapper.getParameter("dataToken");
+        String dataToken = requestWrapper.getHeader("dataToken");
 
         if (StringUtils.isAnyEmpty(dataToken)) {
             throw new ApiException(BasicResponseStatus.DATA_TOKEN_MISSING);
