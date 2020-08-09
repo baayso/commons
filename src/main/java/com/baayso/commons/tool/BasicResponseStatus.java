@@ -19,7 +19,8 @@ public enum BasicResponseStatus implements ResponseStatus {
     PARAMETER_MISSING(4000, "缺少请求参数"),
     PARAMETER_TYPE_ERROR(4001, "请求参数类型不匹配"),
     PARAMETER_CHECK_FAILED(4002, "请求参数校验失败"),
-    REQUEST_BODY_DATA_CONVERT_ERROR(4003, "请求体(RequestBody)数据转换出错"),
+    CONTENT_TYPE_NOT_SUPPORTED(4003, "Content-Type属性设置错误"),
+    REQUEST_BODY_DATA_CONVERT_ERROR(4004, "请求体(RequestBody)数据转换出错"),
     DATA_TOKEN_MISSING(4091, "缺少dataToken参数"),
     DATA_TOKEN_CHECK_FAILED(4092, "数据摘要验证不通过"),
 
