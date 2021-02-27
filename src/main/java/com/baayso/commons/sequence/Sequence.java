@@ -95,8 +95,8 @@ public final class Sequence {
     /**
      * 基于Snowflake创建分布式ID生成器
      *
-     * @param dataCenterId   数据中心ID,数据范围为0~255
-     * @param workerId       工作机器ID,数据范围为0~3
+     * @param dataCenterId   数据中心ID,数据范围为0~3
+     * @param workerId       工作机器ID,数据范围为0~255
      * @param clock          true表示解决高并发下获取时间戳的性能问题
      * @param timeOffset     允许时间回拨的毫秒量,建议5ms
      * @param randomSequence true表示使用毫秒内的随机序列(超过范围则取余)

@@ -20,7 +20,7 @@ public class PerformanceInterceptor extends HandlerInterceptorAdapter {
 
     private static final Logger log = Log.get();
 
-    private NamedThreadLocal<Long> startTimeThreadLocal = new NamedThreadLocal<>("StopWatch-StartTime");
+    private final NamedThreadLocal<Long> startTimeThreadLocal = new NamedThreadLocal<>("StopWatch-StartTime");
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

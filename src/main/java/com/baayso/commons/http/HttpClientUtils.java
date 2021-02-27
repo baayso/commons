@@ -77,6 +77,9 @@ public final class HttpClientUtils {
         try (CloseableHttpResponse response = httpClient.execute(post)) {
 
             HttpEntity entity = response.getEntity();
+
+            // data = EntityUtils.toString(entity, StandardCharsets.UTF_8);
+
             InputStream in = entity.getContent();
             data = HttpClientUtils.readResponse(in);
 
@@ -136,7 +139,7 @@ public final class HttpClientUtils {
         StringBuilder data = new StringBuilder();
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
                 data.append(line).append('\n');
             }

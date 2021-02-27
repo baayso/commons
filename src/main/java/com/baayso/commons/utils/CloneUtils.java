@@ -24,7 +24,7 @@ public class CloneUtils {
      */
     @SuppressWarnings("unchecked")
     public static <T extends Serializable> T clone(T obj) {
-        T newObj = null; // 拷贝产生的新对象
+        T newObj; // 拷贝产生的新对象
 
         byte[] bytes = SerializationUtils.serialize(obj);
         newObj = (T) SerializationUtils.deserialize(bytes);

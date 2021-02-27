@@ -4,6 +4,7 @@ import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,13 +21,17 @@ import java.util.Map;
 public final class DateTimeUtils {
 
     public static final DateTimeFormatter DATE_FORMATTER_SEPARATOR      = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public static final DateTimeFormatter TIME_FORMATTER_SEPARATOR      = DateTimeFormatter.ofPattern("HH:mm:ss");
     public static final DateTimeFormatter DATE_TIME_FORMATTER_SEPARATOR = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public static final DateTimeFormatter DATE_FORMATTER_NO_SEPARATOR      = DateTimeFormatter.ofPattern("yyyyMMdd");
+    public static final DateTimeFormatter TIME_FORMATTER_NO_SEPARATOR      = DateTimeFormatter.ofPattern("HHmmss");
     public static final DateTimeFormatter DATE_TIME_FORMATTER_NO_SEPARATOR = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
     /** 星期 */
     private static final Map<String, String> WEEKDAY = new HashMap<String, String>(7) {
+        private static final long serialVersionUID = 1L;
+
         {
             put("1", "周一");
             put("2", "周二");
@@ -39,6 +44,30 @@ public final class DateTimeUtils {
     };
 
     private DateTimeUtils() {
+    }
+
+    public static String nowDateSeparator() {
+        return LocalDate.now().format(DateTimeUtils.DATE_FORMATTER_SEPARATOR);
+    }
+
+    public static String nowDateNoSeparator() {
+        return LocalDate.now().format(DateTimeUtils.DATE_FORMATTER_NO_SEPARATOR);
+    }
+
+    public static String nowTimeSeparator() {
+        return LocalTime.now().format(DateTimeUtils.TIME_FORMATTER_SEPARATOR);
+    }
+
+    public static String nowTimeNoSeparator() {
+        return LocalTime.now().format(DateTimeUtils.TIME_FORMATTER_NO_SEPARATOR);
+    }
+
+    public static String nowDateTimeSeparator() {
+        return LocalDateTime.now().format(DateTimeUtils.DATE_TIME_FORMATTER_SEPARATOR);
+    }
+
+    public static String nowDateTimeNoSeparator() {
+        return LocalDateTime.now().format(DateTimeUtils.DATE_TIME_FORMATTER_NO_SEPARATOR);
     }
 
     /** Date 转 LocalDate */
