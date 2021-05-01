@@ -24,7 +24,7 @@ public enum BasicResponseStatus implements ResponseStatus {
     DATA_TOKEN_MISSING(4091, "缺少dataToken参数"),
     DATA_TOKEN_CHECK_FAILED(4092, "数据摘要验证不通过"),
 
-    SERVER_INTERNAL_ERROR(500, " 服务器遇到错误，无法完成请求"),
+    SERVER_INTERNAL_ERROR(500, "服务器遇到错误，无法完成请求"),
     NOT_IMPLEMENTED(501, "暂未实现此功能"),
     SERVICE_UNAVAILABLE(503, "服务器当前无法处理请求，请稍后重试"),
 
