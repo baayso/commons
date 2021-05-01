@@ -8,6 +8,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +28,9 @@ public final class DateTimeUtils {
     public static final DateTimeFormatter DATE_FORMATTER_NO_SEPARATOR      = DateTimeFormatter.ofPattern("yyyyMMdd");
     public static final DateTimeFormatter TIME_FORMATTER_NO_SEPARATOR      = DateTimeFormatter.ofPattern("HHmmss");
     public static final DateTimeFormatter DATE_TIME_FORMATTER_NO_SEPARATOR = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+
+    public static final DateTimeFormatter LONG_DATE_TIME_FORMATTER_SEPARATOR    = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+    public static final DateTimeFormatter LONG_DATE_TIME_FORMATTER_NO_SEPARATOR = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
 
     /** 星期 */
     private static final Map<String, String> WEEKDAY = new HashMap<String, String>(7) {
@@ -118,25 +122,67 @@ public final class DateTimeUtils {
         return dateTime.format(DATE_TIME_FORMATTER_SEPARATOR);
     }
 
+    /**
+     * 根据时间获取是上午还是下午（整数表示）。
+     *
+     * @return 0:上午、1:下午
+     */
+    public static int getAmPm(LocalTime localTime) {
+        // 0:上午  1:下午
+        return localTime.get(ChronoField.HOUR_OF_AMPM);
+    }
+
+    /**
+     * 根据时间获取是上午还是下午（汉字表示）。
+     *
+     * @return 上午、下午
+     */
+    public static String getStrAmPm(LocalTime localTime) {
+        // 0:上午  1:下午
+        int ampm = localTime.get(ChronoField.HOUR_OF_AMPM);
+        return ampm == 0 ? "上午" : "下午";
+    }
+
+    /**
+     * 根据日期时间获取是上午还是下午（整数表示）。
+     *
+     * @return 0:上午、1:下午
+     */
+    public static int getAmPm(LocalDateTime localDateTime) {
+        // 0:上午  1:下午
+        return localDateTime.get(ChronoField.AMPM_OF_DAY);
+    }
+
+    /**
+     * 根据日期时间获取是上午还是下午（汉字表示）。
+     *
+     * @return 上午、下午
+     */
+    public static String getStrAmPm(LocalDateTime localDateTime) {
+        // 0:上午  1:下午
+        int ampm = localDateTime.get(ChronoField.AMPM_OF_DAY);
+        return ampm == 0 ? "上午" : "下午";
+    }
+
     /** 根据数字返回“周几” */
     public static String getWeek(int weekValue) {
         return DateTimeUtils.WEEKDAY.get(weekValue + "");
     }
 
-    public static LocalDate getMonday(LocalDate now) {
-        return now.with(DayOfWeek.MONDAY);
+    public static LocalDate getMonday(LocalDate localDate) {
+        return localDate.with(DayOfWeek.MONDAY);
     }
 
-    public static LocalDateTime getMonday(LocalDateTime now) {
-        return now.with(DayOfWeek.MONDAY);
+    public static LocalDateTime getMonday(LocalDateTime localDateTime) {
+        return localDateTime.with(DayOfWeek.MONDAY);
     }
 
-    public LocalDate getSunday(LocalDate now) {
-        return now.with(DayOfWeek.SUNDAY);
+    public LocalDate getSunday(LocalDate localDate) {
+        return localDate.with(DayOfWeek.SUNDAY);
     }
 
-    public LocalDateTime getSunday(LocalDateTime now) {
-        return now.with(DayOfWeek.SUNDAY);
+    public LocalDateTime getSunday(LocalDateTime localDateTime) {
+        return localDateTime.with(DayOfWeek.SUNDAY);
     }
 
     /** 根据出生日期计算年龄 */
