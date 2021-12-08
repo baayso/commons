@@ -28,7 +28,7 @@ public final class AESCoder {
     public static final String KEY_ALGORITHM = "AES";
 
     /**
-     * 加密/解密算法/工作模式/填充方式，<br>
+     * 加密解密算法/工作模式/填充方式(补码方式)，<br>
      * Java 6支持PKCS5Padding填充方式，<br>
      * Bouncy Castle支持PKCS7Padding填充方式。
      */
@@ -65,11 +65,14 @@ public final class AESCoder {
 
     /**
      * 对给定字符串进行加密。
+     * <p>
+     * 与 {@link AESCoder#decryptStr(String)} 配对使用。
      *
      * @param str 待加密的字符串
      *
      * @return 加密数据
      *
+     * @see AESCoder#decryptStr(String)
      * @since 1.0.0
      */
     public String encryptStr(String str) {
@@ -79,15 +82,54 @@ public final class AESCoder {
 
     /**
      * 对给定字符串进行解密。
+     * <p>
+     * 与 {@link AESCoder#encryptStr(String)} 配对使用。
      *
      * @param str 待解密的字符串
      *
      * @return 解密数据
      *
+     * @see AESCoder#encryptStr(String)
      * @since 1.0.0
      */
     public String decryptStr(String str) {
         byte[] data = decrypt(Base64.getDecoder().decode(str), keyBytes);
+        return StringUtils.newStringUtf8(data);
+    }
+
+    /**
+     * 使用指定密钥对给定字符串进行加密。
+     * <p>
+     * 与 {@link AESCoder#decryptStr(String, String)} 配对使用。
+     *
+     * @param str       待加密的字符串
+     * @param secretKey 秘钥，必须为16位字符
+     *
+     * @return 加密数据
+     *
+     * @see AESCoder#decryptStr(String, String)
+     * @since 1.0.1
+     */
+    public String encryptStr(String str, String secretKey) {
+        byte[] data = encrypt(StringUtils.getBytesUtf8(str), StringUtils.getBytesUtf8(secretKey));
+        return Base64.getEncoder().encodeToString(data);
+    }
+
+    /**
+     * 使用指定密钥对给定字符串进行解密。
+     * <p>
+     * 与 {@link AESCoder#encryptStr(String, String)} 配对使用。
+     *
+     * @param str       待解密的字符串
+     * @param secretKey 秘钥，必须为16位字符
+     *
+     * @return 解密数据
+     *
+     * @see AESCoder#encryptStr(String, String)
+     * @since 1.0.1
+     */
+    public String decryptStr(String str, String secretKey) {
+        byte[] data = decrypt(Base64.getDecoder().decode(str), StringUtils.getBytesUtf8(secretKey));
         return StringUtils.newStringUtf8(data);
     }
 
@@ -141,12 +183,15 @@ public final class AESCoder {
 
     /**
      * 加密。
+     * <p>
+     * 与 {@link AESCoder#decrypt(byte[], byte[])} 配对使用。
      *
      * @param data 待加密数据
      * @param key  密钥
      *
      * @return 加密数据
      *
+     * @see AESCoder#decrypt(byte[], byte[])
      * @since 1.0.0
      */
     public byte[] encrypt(byte[] data, byte[] key) {
@@ -171,12 +216,15 @@ public final class AESCoder {
 
     /**
      * 解密。
+     * <p>
+     * 与 {@link AESCoder#encrypt(byte[], byte[])} 配对使用。
      *
      * @param data 待解密数据
      * @param key  密钥
      *
      * @return 解密数据
      *
+     * @see AESCoder#encrypt(byte[], byte[])
      * @since 1.0.0
      */
     public byte[] decrypt(byte[] data, byte[] key) {
