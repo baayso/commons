@@ -98,9 +98,43 @@
         <spring-data-redis.version>2.7.8</spring-data-redis.version>
         <jackson.version>2.14.2</jackson.version>
         <slf4j.version>1.7.33</slf4j.version>
+        <hutool.version>5.8.12</hutool.version>
     </properties>
 
     <dependencies>
+        <!-- HuTool begin -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-core</artifactId>
+            <version>${hutool.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-crypto</artifactId>
+            <version>${hutool.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-extra</artifactId>
+            <version>${hutool.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-http</artifactId>
+            <version>${hutool.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-poi</artifactId>
+            <version>${hutool.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <!-- HuTool end -->
+
         <!-- ASPECTJ begin -->
         <dependency>
             <groupId>org.aspectj</groupId>
@@ -430,6 +464,14 @@
             <version>${spring-data-redis.version}</version>
             <optional>true</optional>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>6.0.1</version>
+            <optional>true</optional>
+        </dependency>
+        <!-- SPRING end -->
 
         <!-- JSON begin -->
         <dependency>
