@@ -3,6 +3,7 @@ package com.baayso.commons.exception;
 import org.slf4j.Logger;
 
 import com.baayso.commons.log.Log;
+import com.baayso.commons.tool.BasicResponseStatus;
 import com.baayso.commons.tool.ResponseStatus;
 
 /**
@@ -13,7 +14,7 @@ import com.baayso.commons.tool.ResponseStatus;
  */
 public class ApiException extends RuntimeException {
 
-    private static final long serialVersionUID = -3247721709918992766L;
+    private static final long serialVersionUID = 1L;
 
     private static final Logger log = Log.get();
 
@@ -23,7 +24,11 @@ public class ApiException extends RuntimeException {
     }
 
     public ApiException(String message) {
-        super(message);
+        this(BasicResponseStatus.SERVER_INTERNAL_ERROR.value(), message);
+    }
+
+    public ApiException(String message, Object... args) {
+        this(String.format(message, args));
     }
 
     public ApiException(ResponseStatus responseStatus) {
@@ -47,8 +52,17 @@ public class ApiException extends RuntimeException {
         };
     }
 
+    public ApiException(int code, String message, Object... args) {
+        this(code, String.format(message, args));
+    }
+
     public ApiException(ResponseStatus responseStatus, String message) {
         super(message);
+        this.responseStatus = responseStatus;
+    }
+
+    public ApiException(ResponseStatus responseStatus, String message, Object... args) {
+        super(String.format(message, args));
         this.responseStatus = responseStatus;
     }
 

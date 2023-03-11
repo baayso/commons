@@ -1,5 +1,7 @@
 package com.baayso.commons.utils;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -10,8 +12,6 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * DateTime工具类。
@@ -32,20 +32,15 @@ public final class DateTimeUtils {
     public static final DateTimeFormatter LONG_DATE_TIME_FORMATTER_SEPARATOR    = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
     public static final DateTimeFormatter LONG_DATE_TIME_FORMATTER_NO_SEPARATOR = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
 
-    /** 星期 */
-    private static final Map<String, String> WEEKDAY = new HashMap<String, String>(7) {
-        private static final long serialVersionUID = 1L;
-
-        {
-            put("1", "周一");
-            put("2", "周二");
-            put("3", "周三");
-            put("4", "周四");
-            put("5", "周五");
-            put("6", "周六");
-            put("7", "周日");
+    public static final ThreadLocal<DateFormat> SIMPLE_DATE_FORMAT = new ThreadLocal<DateFormat>() {
+        @Override
+        protected DateFormat initialValue() {
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         }
     };
+
+    /** 星期 */
+    private static final String[] WEEKDAY = new String[]{"周一", "周二", "周三", "周四", "周五", "周六", "周日"};
 
     private DateTimeUtils() {
     }
@@ -164,9 +159,18 @@ public final class DateTimeUtils {
         return ampm == 0 ? "上午" : "下午";
     }
 
-    /** 根据数字返回“周几” */
+    /** 根据数字返回汉字“周几” */
     public static String getWeek(int weekValue) {
-        return DateTimeUtils.WEEKDAY.get(weekValue + "");
+        if (weekValue < 1 || weekValue > 7) {
+            return "";
+        }
+
+        return DateTimeUtils.WEEKDAY[weekValue - 1];
+    }
+
+    /** 根据DayOfWeek枚举返回汉字“周几” */
+    public static String getWeek(DayOfWeek dayOfWeek) {
+        return DateTimeUtils.WEEKDAY[dayOfWeek.ordinal()];
     }
 
     public static LocalDate getMonday(LocalDate localDate) {

@@ -1,7 +1,7 @@
 package com.baayso.commons.tool;
 
 /**
- * Basic response status。
+ * 基础响应状态。
  *
  * @author ChenFangjie (2020/8/8 14:09)
  * @since 1.0.1
@@ -28,8 +28,8 @@ public enum BasicResponseStatus implements ResponseStatus {
     NOT_IMPLEMENTED(501, "暂未实现此功能"),
     SERVICE_UNAVAILABLE(503, "服务器当前无法处理请求，请稍后重试"),
 
-    ERROR(5000, "执行失败");
-
+    ERROR(5000, "执行失败"),
+    ;
 
     private final int    value;
     private final String reason;
@@ -71,7 +71,7 @@ public enum BasicResponseStatus implements ResponseStatus {
      */
     @Override
     public String getReason() {
-        return reason;
+        return this.reason;
     }
 
     /**
@@ -79,7 +79,7 @@ public enum BasicResponseStatus implements ResponseStatus {
      */
     @Override
     public String toString() {
-        return Integer.toString(value);
+        return Integer.toString(this.value);
     }
 
 }
